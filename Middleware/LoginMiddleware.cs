@@ -1,3 +1,6 @@
+using CloudDrive.DataAccess.Controllers;
+using Microsoft.Extensions.Primitives;
+
 namespace CloudDrive.Middleware;
 
 public class LoginMiddleware
@@ -22,38 +25,6 @@ public class LoginMiddleware
         }
     }
 
-    private int GetUidFromStream(Stream stream)
-    {
-        int uid = -1;
-        int i;
-        while((i = stream.ReadByte()) != -1)
-        {
-            if((char)i == ':')
-            {
-                bool start = false;
-                string s = "";
-                while((i = stream.ReadByte()) != -1)
-                {
-                    char c = (char)i;
-                    if(start) {
-                        if(c == ' ') break;
-                        s.Append(c);
-                    } else if(c == ' ') continue;
-                    else start = true;
-                }
-
-                try
-                {
-                    return int.Parse(s);
-                } catch {
-                    return -1;
-                }
-            }
-        }
-
-        return uid;
-    }
-
     private async Task RespondBadUserKey(HttpContext context)
     {
         context.Response.ContentType = "text/plain";
@@ -67,23 +38,24 @@ public class LoginMiddleware
         string endpoint = context.GetEndpoint()?.ToString() ?? "";
         if(!ValidEndpoint(endpoint))
         {
-            using(MemoryStream memoryStream = new MemoryStream())
+            bool isValid = false;
+            if(context.Request.Query.TryGetValue("loginkey", out StringValues s))
             {
-                await context.Request.Body.CopyToAsync(memoryStream);
-                memoryStream.Position = 0;
-                context.Request.Body = memoryStream;
-                
-                int uid = GetUidFromStream(memoryStream);
+                if(int.TryParse(s.ToString(), out int loginKey))
+                {
+                    UserController userController = new UserController();
 
-                if(uid == -1) {
-                    // invalid uid in body
-                    await RespondBadUserKey(context);
-                    return;
+                    // Validate login key
+                    isValid = userController.CorrectLogin(loginKey);
                 }
-                
-                // TODO
-                // check that key is valid in db
             }
+
+            if(!isValid)
+            {
+                await RespondBadUserKey(context);
+                return;
+            }
+
         }
         
         // All is good, proceed with next task
