@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace CloudDrive.Middleware;
 
 public class LoginMiddleware
