@@ -26,7 +26,9 @@ public class UserController
 
     public bool CorrectLogin(int key)
     {
+        _connection.Open();
         // TODO
+        _connection.Close();
         return false;
     }
 
