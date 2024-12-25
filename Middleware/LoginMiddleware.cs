@@ -25,11 +25,11 @@ public class LoginMiddleware
         }
     }
 
-    private async Task RespondBadUserKey(HttpContext context)
+    private async Task RespondBadLoginKey(HttpContext context)
     {
         context.Response.ContentType = "text/plain";
         context.Response.StatusCode = 401; // Unauthorized
-        await context.Response.WriteAsync("Invalid user key");
+        await context.Response.WriteAsync("Invalid login key");
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -52,10 +52,9 @@ public class LoginMiddleware
 
             if(!isValid)
             {
-                await RespondBadUserKey(context);
+                await RespondBadLoginKey(context);
                 return;
             }
-
         }
         
         // All is good, proceed with next task
