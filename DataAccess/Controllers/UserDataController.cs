@@ -94,7 +94,12 @@ public class UserDataController
         _connection.Close();
     }
 
-    public void UpdatePassword(string password)
+    public void GetUsername(string loginKey)
+    {
+        // TODO
+    }
+
+    public void GetUsernames()
     {
         // TODO
     }

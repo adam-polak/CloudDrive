@@ -1,4 +1,5 @@
 using CloudDrive.DataAccess.Controllers;
+using CloudDrive.DataAccess.Models;
 using Microsoft.Extensions.Primitives;
 
 namespace CloudDrive.Middleware;
@@ -42,15 +43,11 @@ public class LoginMiddleware
         if(!ValidEndpoint(endpoint))
         {
             bool isValid = false;
-            if(context.Request.Query.TryGetValue("loginkey", out StringValues s))
+            if(context.Request.Query.TryGetValue("loginkey", out StringValues loginKey))
             {
-                if(int.TryParse(s.ToString(), out int loginKey))
-                {
-                    UserDataController userController = new UserDataController();
-
-                    // Validate login key
-                    isValid = userController.CorrectLogin(loginKey);
-                }
+                UserDataController userController = new UserDataController();
+                // Validate login key
+                isValid = userController.ContainsLoginKey(loginKey.ToString());
             }
 
             if(!isValid)

@@ -13,8 +13,6 @@ public class UserController : ControllerBase
     [HttpPost("login")]
     public IActionResult Login()
     {
-        UserDataController userController = new UserDataController();
-        userController.CorrectLogin(123);
         return Ok();
     }
 
