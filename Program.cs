@@ -1,3 +1,5 @@
+using CloudDrive.Middleware;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,6 +18,7 @@ if (!app.Environment.IsDevelopment())
 // app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseLoginMiddleware();
 
 
 app.MapControllerRoute(
