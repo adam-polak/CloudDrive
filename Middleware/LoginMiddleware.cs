@@ -17,8 +17,8 @@ public class LoginMiddleware
         switch(endpoint)
         {
             case "":
-            case "login":
-            case "createuser":
+            case "Login":
+            case "CreateUser":
                 return true;
             default:
                 return false;
@@ -34,8 +34,11 @@ public class LoginMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        // Validate endpoint
+        // Validate endpoint Formatted as: xxx.yyy.{...}.<methodname> (CloudDrive)
         string endpoint = context.GetEndpoint()?.ToString() ?? "";
+        string[] arr = endpoint.Split(' ')[0].Split('.');
+        endpoint = arr[arr.Length - 1];
+
         if(!ValidEndpoint(endpoint))
         {
             bool isValid = false;
@@ -59,5 +62,13 @@ public class LoginMiddleware
         
         // All is good, proceed with next task
         await _next(context);
+    }
+}
+
+public static class LoginMiddlewareExtensions
+{
+    public static IApplicationBuilder UseLoginMiddleware(this IApplicationBuilder builder)
+    {
+        return builder.UseMiddleware<LoginMiddleware>();
     }
 }

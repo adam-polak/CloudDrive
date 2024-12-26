@@ -27,7 +27,7 @@ public class UserController
     public bool CorrectLogin(int key)
     {
         _connection.Open();
-        // TODO
+        Console.WriteLine("In correct login!");
         _connection.Close();
         return false;
     }

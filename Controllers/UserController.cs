@@ -14,4 +14,10 @@ public class UserController : ControllerBase
     {
         return Ok();
     }
+
+    [HttpGet("temp")]
+    public IActionResult Temp()
+    {
+        return Ok();
+    }
 }
