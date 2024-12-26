@@ -1,5 +1,4 @@
 using CloudDrive.DataAccess.Controllers;
-using CloudDrive.DataAccess.Models;
 using Microsoft.Extensions.Primitives;
 
 namespace CloudDrive.Middleware;
