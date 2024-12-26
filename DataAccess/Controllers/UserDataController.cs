@@ -1,5 +1,8 @@
 using System.Data.Common;
+using System.Security.Cryptography;
 using CloudDrive.DataAccess.Lib;
+using CloudDrive.DataAccess.Models;
+using Dapper;
 
 namespace CloudDrive.DataAccess.Controllers;
 
@@ -14,37 +17,98 @@ public class UserDataController
 
     public bool ContainsUsername(string username)
     {
-        // TODO
-        return false;
+        string sql = "SELECT * FROM user_table WHERE username = @username;";
+
+        _connection.Open();
+        List<User> users = _connection.Query<User>(sql, new { username = username }).ToList();
+        _connection.Close();
+
+        return users.Count() == 1;
     }
 
     public bool CorrectLogin(string username, string password)
     {
-        // TODO
-        return false;
-    }
+        string sql = "SELECT * FROM user_table WHERE username = @username AND password = @password;";
 
-    public bool CorrectLogin(int key)
-    {
         _connection.Open();
+        List<User> users = _connection.Query<User>(sql, new { username = username, password = password }).ToList();
         _connection.Close();
-        return false;
+
+        return users.Count() == 1;
     }
 
-    public int CreateUser(string username, string password)
+    public bool ContainsLoginKey(string loginKey)
     {
-        // TODO
-            // return uid
-        return -1;
+        string sql = "SELECT * FROM user_table WHERE loginkey = @loginKey;";
+
+        _connection.Open();
+        List<User> users = _connection.Query<User>(sql, new { loginKey = loginKey }).ToList();
+        _connection.Close();
+
+        return users.Count() == 1;
     }
 
-    public void DeleteUser(int uid)
+    public void CreateUser(string username, string password)
     {
-        // TODO
+        // Setup SQL string
+        string sql = "INSERT INTO user_table (username, password, loginkey) VALUES (@username, @password, @loginkey);";
+        object[] parameters = { new { username = username, password = password, loginkey = LoginKey.Create() }};
+        
+        // Open connection, and execute command
+        _connection.Open();
+        _connection.Execute(sql, parameters);
+        _connection.Close();
+    }
+
+    public void UpdateLoginKey(string username, string loginKey)
+    {
+        string sql = "UPDATE user_table SET loginKey = @loginKey WHERE username = @username;";
+        object[] parameters = { new { username = username, loginKey = loginKey } };
+
+        _connection.Open();
+        _connection.Execute(sql, parameters);
+        _connection.Close();
+    }
+
+    public string? LoginToUser(string username, string password)
+    {
+        if(!CorrectLogin(username, password)) return null;
+        
+        string loginKey = LoginKey.Create();
+        while(ContainsLoginKey(loginKey))
+        {
+            loginKey = LoginKey.Create();
+        }
+
+        UpdateLoginKey(username, loginKey);
+
+        return loginKey;
+    }
+
+    public void DeleteUser(int id)
+    {
+        string sql = "DELETE FROM user_table WHERE id = @id;";
+
+        _connection.Open();
+        _connection.Execute(sql, new { id = id });
+        _connection.Close();
     }
 
     public void UpdatePassword(string password)
     {
         // TODO
+    }
+}
+
+static class LoginKey
+{
+    public static string Create()
+    {
+        using(RandomNumberGenerator rng = RandomNumberGenerator.Create())
+        {
+            byte[] bytes = new byte[32];
+            rng.GetBytes(bytes);
+            return Convert.ToBase64String(bytes);
+        }
     }
 }
