@@ -46,7 +46,7 @@ public class LoginMiddleware
             {
                 if(int.TryParse(s.ToString(), out int loginKey))
                 {
-                    UserController userController = new UserController();
+                    UserDataController userController = new UserDataController();
 
                     // Validate login key
                     isValid = userController.CorrectLogin(loginKey);

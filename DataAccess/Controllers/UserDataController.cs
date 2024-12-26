@@ -3,11 +3,11 @@ using CloudDrive.DataAccess.Lib;
 
 namespace CloudDrive.DataAccess.Controllers;
 
-public class UserController
+public class UserDataController
 {
     private DbConnection _connection;
 
-    public UserController()
+    public UserDataController()
     {
         _connection = DbConnectionHandler.CreateDbConnection();
     }
@@ -27,7 +27,6 @@ public class UserController
     public bool CorrectLogin(int key)
     {
         _connection.Open();
-        Console.WriteLine("In correct login!");
         _connection.Close();
         return false;
     }
