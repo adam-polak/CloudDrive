@@ -104,6 +104,16 @@ public class UserDataController
         return user;
     }
 
+    public int GetUserId(string username, string password)
+    {
+        string sql = "SELECT * FROM user_table WHERE username = @username AND password = @password;";
+        
+        _connection.Open();
+        User user = _connection.Query<User>(sql, new { username = username, password = password }).First();
+        _connection.Close();
+        return user.Id;
+    }
+
     public int GetUserId(string loginKey)
     {
         return GetUser(loginKey).Id;

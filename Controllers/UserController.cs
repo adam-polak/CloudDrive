@@ -1,4 +1,5 @@
 using CloudDrive.DataAccess.Controllers;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 
@@ -9,10 +10,13 @@ public class UserController : ControllerBase
 {
 
     private UserDataController _userDataController;
+    private FolderDataController _folderDataController;
 
     public UserController()
     {
         _userDataController = new UserDataController();
+        _folderDataController = new FolderDataController();
+
     }
 
     [HttpPost("login/{username}/{password}")]
@@ -34,7 +38,12 @@ public class UserController : ControllerBase
     public IActionResult CreateUser(string username, string password)
     {
         try {
+            if(_userDataController.ContainsUsername(username)) {
+                return Conflict();
+            }
             _userDataController.CreateUser(username, password);
+            int userId = _userDataController.GetUserId(username, password);
+            _folderDataController.CreateFolder(userId, 0, "root");
             return Ok();
         } catch {
             return BadRequest();

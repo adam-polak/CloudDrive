@@ -50,4 +50,9 @@ public class FolderDataController
         _connection.Execute(sql, parameters);
         _connection.Close();
     }
+
+    public void DeleteAllContents(int userId, int folderId)
+    {
+        // TODO
+    }
 }
