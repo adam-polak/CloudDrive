@@ -1,4 +1,5 @@
 using CloudDrive.DataAccess.Controllers;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 
@@ -7,8 +8,14 @@ namespace CloudDrive.Controllers;
 [Route("userapi")]
 public class UserController : ControllerBase
 {
+
+    private UserDataController _userDataController;
+    private FolderDataController _folderDataController;
+
     public UserController()
     {
+        _userDataController = new UserDataController();
+        _folderDataController = new FolderDataController();
 
     }
 
@@ -16,8 +23,7 @@ public class UserController : ControllerBase
     public IActionResult Login(string username, string password)
     {
         try {
-            UserDataController userDataController = new UserDataController();
-            string? loginKey = userDataController.LoginToUser(username, password);
+            string? loginKey = _userDataController.LoginToUser(username, password);
             if(loginKey != null) {
                 return Ok(loginKey);
             } else {
@@ -32,8 +38,12 @@ public class UserController : ControllerBase
     public IActionResult CreateUser(string username, string password)
     {
         try {
-            UserDataController userDataController = new UserDataController();
-            userDataController.CreateUser(username, password);
+            if(_userDataController.ContainsUsername(username)) {
+                return Conflict();
+            }
+            _userDataController.CreateUser(username, password);
+            int userId = _userDataController.GetUserId(username, password);
+            _folderDataController.CreateFolder(userId, 0, "root");
             return Ok();
         } catch {
             return BadRequest();
@@ -49,8 +59,7 @@ public class UserController : ControllerBase
             HttpRequest request = HttpContext.Request;
             if(request.Query.TryGetValue("loginkey", out StringValues loginKey))
             {
-                UserDataController userData = new UserDataController();
-                isValid = userData.ContainsLoginKey(loginKey.ToString());
+                isValid = _userDataController.ContainsLoginKey(loginKey.ToString());
             }
 
             if(isValid) return Ok();

@@ -94,9 +94,34 @@ public class UserDataController
         _connection.Close();
     }
 
-    public void GetUsername(string loginKey)
+    public User GetUser(string loginKey)
     {
-        // TODO
+        string sql = "SELECT * FROM user_table WHERE loginkey = @loginkey;";
+
+        _connection.Open();
+        User user = _connection.Query<User>(sql, new { loginkey = loginKey }).First();
+        _connection.Close();
+        return user;
+    }
+
+    public int GetUserId(string username, string password)
+    {
+        string sql = "SELECT * FROM user_table WHERE username = @username AND password = @password;";
+        
+        _connection.Open();
+        User user = _connection.Query<User>(sql, new { username = username, password = password }).First();
+        _connection.Close();
+        return user.Id;
+    }
+
+    public int GetUserId(string loginKey)
+    {
+        return GetUser(loginKey).Id;
+    }
+
+    public string GetUsername(string loginKey)
+    {
+        return GetUser(loginKey).Username;
     }
 
     public void GetUsernames()
