@@ -28,11 +28,26 @@ public class FolderDataController
 
     public void DeleteFolder(int userId, int folderId)
     {
-        // TODO
+        string sql = "DELETE FROM folder_table"
+                    + " WHERE ownerid = @ownerid AND folderid = @folderid;";
+        
+        object[] parameters = { new { ownerid = userId, folderid = folderId } };
+        
+        _connection.Open();
+        _connection.Execute(sql, parameters);
+        _connection.Close();
     }
 
     public void ChangeFolderName(int userId, int folderId, string folderName)
     {
-        // TODO
+        string sql = "UPDATE folder_table"
+                    + " SET folder_name = @foldername"
+                    + " WHERE ownerid = @ownerid AND parentid = @folderid;";
+        
+        object[] parameters = { new { foldername = folderName, ownerid = userId, parentid = folderId } };
+
+        _connection.Open();
+        _connection.Execute(sql, parameters);
+        _connection.Close();
     }
 }
