@@ -1,5 +1,6 @@
 using System.Data.Common;
 using CloudDrive.DataAccess.Lib;
+using Dapper;
 
 namespace CloudDrive.DataAccess.Controllers;
 
@@ -14,7 +15,15 @@ public class FolderDataController
 
     public void CreateFolder(int userId, int parentId, string folderName)
     {
-        // TODO
+        string sql = "INSERT INTO folder_table"
+                    + " (ownerid, folder_name, parentid)"
+                    + "VALUES ( @ownerid, @folder_name, @parentid );";
+
+        object[] parameters = { new { ownerid = userId, folder_name = folderName, parentid = parentId } };
+        
+        _connection.Open();
+        _connection.Execute(sql, parameters);
+        _connection.Close();
     }
 
     public void DeleteFolder(int userId, int folderId)
