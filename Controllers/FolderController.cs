@@ -9,37 +9,34 @@ public class FolderController : ControllerBase
 {
     private FolderDataController _folderDataController;
     private UserDataController _userDataController;
-    private string _loginKey;
-    private int _userId;
-    private HttpRequest _request;
 
     public FolderController()
     {
         _folderDataController = new FolderDataController();
         _userDataController = new UserDataController();
-        
-        _request = HttpContext.Request;
-
-        if(!_request.Query.TryGetValue("loginkey", out StringValues values)) {
-            throw new InvalidOperationException(
-                "LoginMiddleware shouldn't allow program to this point if loginkey isn't present in query params"
-                );
-        }
-
-        _loginKey = values.ToString();
-        _userId = _userDataController.GetUserId(_loginKey);
     }
 
     [HttpPost("createfolder")]
     public IActionResult CreateFolder()
     {
-        if(!_request.Query.TryGetValue("foldername", out StringValues value)) {
+        HttpRequest request = HttpContext.Request;
+
+        if(!request.Query.TryGetValue("loginkey", out StringValues values)) {
+            throw new InvalidOperationException(
+                "LoginMiddleware shouldn't allow program to this point if loginkey isn't present in query params"
+                );
+        }
+
+        string loginKey = values.ToString();
+        int userId = _userDataController.GetUserId(loginKey);
+
+        if(!request.Query.TryGetValue("foldername", out StringValues value)) {
             return BadRequest();
         }
 
         string folderName = value.ToString();
 
-        if(!_request.Query.TryGetValue("folderid", out value)) {
+        if(!request.Query.TryGetValue("folderid", out value)) {
             return BadRequest();
         }
 
@@ -49,8 +46,8 @@ public class FolderController : ControllerBase
                 return Conflict();
             }
 
-            _folderDataController.CreateFolder(_userId, parentId, folderName);
-            
+            _folderDataController.CreateFolder(userId, parentId, folderName);
+
             return Ok();
         } catch {
             return BadRequest();
