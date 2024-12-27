@@ -7,17 +7,19 @@ namespace CloudDrive.Controllers;
 [Route("userapi")]
 public class UserController : ControllerBase
 {
+
+    private UserDataController _userDataController;
+
     public UserController()
     {
-
+        _userDataController = new UserDataController();
     }
 
     [HttpPost("login/{username}/{password}")]
     public IActionResult Login(string username, string password)
     {
         try {
-            UserDataController userDataController = new UserDataController();
-            string? loginKey = userDataController.LoginToUser(username, password);
+            string? loginKey = _userDataController.LoginToUser(username, password);
             if(loginKey != null) {
                 return Ok(loginKey);
             } else {
@@ -32,8 +34,7 @@ public class UserController : ControllerBase
     public IActionResult CreateUser(string username, string password)
     {
         try {
-            UserDataController userDataController = new UserDataController();
-            userDataController.CreateUser(username, password);
+            _userDataController.CreateUser(username, password);
             return Ok();
         } catch {
             return BadRequest();
@@ -49,8 +50,7 @@ public class UserController : ControllerBase
             HttpRequest request = HttpContext.Request;
             if(request.Query.TryGetValue("loginkey", out StringValues loginKey))
             {
-                UserDataController userData = new UserDataController();
-                isValid = userData.ContainsLoginKey(loginKey.ToString());
+                isValid = _userDataController.ContainsLoginKey(loginKey.ToString());
             }
 
             if(isValid) return Ok();
