@@ -19,6 +19,7 @@ public class LoginMiddleware
             case "":
             case "Login":
             case "CreateUser":
+            case "LoginKey":
                 return true;
             default:
                 return false;
