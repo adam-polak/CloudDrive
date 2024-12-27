@@ -1,2 +1,13 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<h1>Cloud Drive</h1>
+
+<a href="user/login">
+    <button class="border-2">
+        Login Page
+    </button>
+</a>
+
+<a href="signedin">
+    <button class="border-2">
+        signedin
+    </button>
+</a>
