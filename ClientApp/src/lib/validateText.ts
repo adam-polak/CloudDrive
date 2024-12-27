@@ -27,7 +27,7 @@ export function validUsername(value: string) {
     
     if(!allLetters(value)) return ValidUser.OnlyLetters;
 
-    if(value.length < 6) return ValidUser.Length;
+    if(value.length < 3) return ValidUser.Length;
 
     return ValidUser.OK;
 }
@@ -41,7 +41,7 @@ export enum ValidPassword {
 export function validPassword(value: string) {
     if(hasSpace(value)) return ValidPassword.Space;
     
-    if(value.length < 8) return ValidPassword.Length;
+    if(value.length < 6) return ValidPassword.Length;
 
     return ValidPassword.OK;
 }
