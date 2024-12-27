@@ -4,6 +4,7 @@ using Microsoft.Extensions.Primitives;
 
 namespace CloudDrive.Controllers;
 
+[Route("userapi")]
 public class UserController : ControllerBase
 {
     public UserController()
@@ -14,7 +15,6 @@ public class UserController : ControllerBase
     [HttpPost("login/{username}/{password}")]
     public IActionResult Login(string username, string password)
     {
-        return Ok("hello");
         UserDataController userDataController = new UserDataController();
         try {
             string? loginKey = userDataController.LoginToUser(username, password);

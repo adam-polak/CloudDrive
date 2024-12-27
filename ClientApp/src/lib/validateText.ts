@@ -27,7 +27,7 @@ export function validUsername(value: string) {
     
     if(!allLetters(value)) return ValidUser.OnlyLetters;
 
-    if(value.length < 6) return ValidUser.Length;
+    if(value.length < 3) return ValidUser.Length;
 
     return ValidUser.OK;
 }

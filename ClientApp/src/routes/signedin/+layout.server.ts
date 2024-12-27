@@ -2,26 +2,34 @@
 
 import { redirect } from "@sveltejs/kit";
 import type { User } from "$lib/user";
-import type { Cookies } from "@sveltejs/kit";
 
 export const load = async (event) => {
 
-    console.log(event.cookies.get("loginkey"));
-    console.log(event.cookies.get("username"));
+    const userJson: string | undefined = event.cookies.get("user");
 
+    if(!userJson) return redirect(302, "/user/login");
 
-    // fetch(`http://localhost:5141/checkloginkey?loginkey=${loginKey}`)
-    // .then(result => {
-    //     if(result.status == 401) {
-    //         return redirect(302, "/user/login");
-    //     }
+    const user: User = JSON.parse(userJson);
 
-    //     const user: User = { Username: "temp", LoginKey: loginKey };
+    try {
+        const result = await event.fetch(
+            `/userapi/loginkey?loginkey=${user.LoginKey}`
+        );
 
-    //     return {
-    //         user: user
-    //     }
-    // }).catch(() => {
-    //     return redirect(302, "/user/login");
-    // });
+        if(result.status != 200) {
+            event.cookies.delete("user", {
+                path: "/"
+            });
+            return redirect(302, "/user/login");
+        }
+    } catch(e) {
+        event.cookies.delete("user", {
+            path: "/"
+        });
+        return redirect(302, "/user/login");
+    }
+
+    return {
+        user: user
+    }
 }

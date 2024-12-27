@@ -1,11 +1,11 @@
 import type { User } from "$lib/user";
-import { ValidPassword, validPassword, ValidUser, validUsername, validUsername } from "$lib/validateText";
+import { ValidPassword, validPassword, ValidUser, validUsername } from "$lib/validateText";
 import { redirect, type Actions } from "@sveltejs/kit"
 
 // @ts-ignore
 export const load = async (event) => {
-    if(event.locals.user) {
-        redirect(302, "/signedin");
+    if(event.cookies.get("user")) {
+        redirect(302, "/signedin")
     }
     
     return {};
@@ -36,23 +36,40 @@ export const actions: Actions = {
             }
         }
 
-        // make api request
+        // Verify login with backend
+        try {
+            const result = await event.fetch(
+                `/userapi/login/${username}/${password}`,
+                {
+                    method: "POST"
+                }
+            );
 
-        return {};
+            console.log(result.status);
 
-        // const user: User = { 
-        //     Username: "test",
-        //     LoginKey: "agoodkey"
-        // }
+            if(result.status != 200) {
+                return {
+                    message: "Invalid username or password"
+                }
+            }
 
-        // event.cookies.set("loginkey", user.LoginKey, {
-        //     path: "/"
-        // });
+            const loginKey = await result.text();
 
-        // event.cookies.set("username", user.Username, {
-        //     path: "/"
-        // });
+            const user: User = {
+                LoginKey: loginKey,
+                Username: username
+            }
 
-        // return redirect(302, "/signedin");
+            event.cookies.set("user", JSON.stringify(user), {
+                path: "/"
+            });
+
+            return redirect(302, "/signedin");
+        } catch {
+            return {
+                message: "Server error"
+            }
+        }
+        
     }
 }
