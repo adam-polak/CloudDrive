@@ -1,5 +1,6 @@
 using System.Data.Common;
 using CloudDrive.DataAccess.Lib;
+using CloudDrive.DataAccess.Models;
 using Dapper;
 
 namespace CloudDrive.DataAccess.Controllers;
@@ -24,6 +25,16 @@ public class FolderDataController
         _connection.Open();
         _connection.Execute(sql, parameters);
         _connection.Close();
+    }
+
+    public bool ContainsFolder(int parentId, string folderName)
+    {
+        string sql = "SELECT * FROM folder_table WHERE folder_name = @foldername AND parentid = @parentid;";
+
+        _connection.Open();
+        List<Folder> folders = _connection.Query<Folder>(sql, new { foldername = folderName, parentid = parentId }).ToList();
+        _connection.Close();
+        return folders.Count == 1;
     }
 
     public void DeleteFolder(int userId, int folderId)
