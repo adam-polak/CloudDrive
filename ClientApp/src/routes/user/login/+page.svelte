@@ -1,49 +1,25 @@
 <script lang="ts">
-    import { ValidPassword, validPassword, ValidUser, validUsername } from "$lib/validateText";
 
-    let username = $state("");
-    let usernameError = $state("");
+    let { form } = $props();
 
-    let password = $state("");
-    let passwordError = $state("");
-
-    let generalError = $state("");
-
-    function tryLogin() {
-
-        const validateUser = validUsername(username);
-        if(validateUser != ValidUser.OK) {
-            usernameError = "Invalid username";
-            return;
-        } else usernameError = "";
-
-        const validatePassword = validPassword(password);
-        if(validatePassword != ValidPassword.OK) {
-            passwordError = "Invalid password";
-        } else passwordError = "";
-
-        // try login
-        console.log(username);
-        console.log(password);
-    }
 </script>
 
 <div class="bg-gray-100 h-screen flex items-center justify-center">
     <div class="bg-white shadow-lg rounded-lg p-8 max-w-sm w-full">
-        <form onsubmit={tryLogin}>
+        <form method="POST">
             <h2 class="text-2xl font-bold text-gray-800 text-center mb-4">Login</h2>
-            {#if generalError.length != 0}
-                <h4 class="text-center mb-3 text-md text-red-400">*{generalError}</h4>
+            {#if form?.message === "Server error" || form?.message === "Invalid username or password"}
+                <h4 class="text-center mb-3 text-md text-red-400">*{form?.message}</h4>
             {/if}
             <div class="mb-4">
                 <label for="username" class="block text-gray-700 text-sm font-medium mb-2">Username</label>
                 <input 
-                    type="text" id="username" placeholder="Enter your username" 
+                    type="text" id="username" name="username" placeholder="Enter your username" 
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    bind:value={username}
+                    value=""
                 >
-                {#if usernameError.length != 0}
-                    <p class="text-red-400 ml-4">*{usernameError}</p>
+                {#if form?.usernameError != null}
+                    <p class="text-red-400 ml-4">*{form?.usernameError}</p>
                 {/if}
             </div>
             <div class="mb-4">
@@ -51,12 +27,13 @@
                 <input 
                     type="password" 
                     id="password" 
+                    name="password"
                     placeholder="Enter your password" 
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    bind:value={password}
+                    value=""
                 >
-                {#if passwordError.length != 0}
-                    <p class="text-red-400 ml-4">*{usernameError}</p>
+                {#if form?.passwordError != null}
+                    <p class="text-red-400 ml-4">*{form?.passwordError}</p>
                 {/if}
             </div>
             <button

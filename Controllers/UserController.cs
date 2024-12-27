@@ -11,10 +11,21 @@ public class UserController : ControllerBase
 
     }
 
-    [HttpPost("login")]
-    public IActionResult Login()
+    [HttpPost("login/{username}/{password}")]
+    public IActionResult Login(string username, string password)
     {
-        return Ok();
+        return Ok("hello");
+        UserDataController userDataController = new UserDataController();
+        try {
+            string? loginKey = userDataController.LoginToUser(username, password);
+            if(loginKey != null) {
+                return Ok(loginKey);
+            } else {
+                return Unauthorized();
+            }
+        } catch {
+            return BadRequest();
+        }
     }
 
     [HttpGet("checkloginkey")]
