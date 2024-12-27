@@ -6,8 +6,11 @@
 
 <div class="bg-gray-100 min-h-screen flex flex-col">
     <!-- Header -->
-    <header class="bg-white shadow-md p-4 flex gap-2 justify-between items-center">
-        <h1 class="text-lg font-bold text-blue-600">CloudDrive</h1>
+    <header class="bg-white shadow-md p-4 flex gap-3 justify-between items-center">
+        <div>
+            <h1 class="font-bold text-2xl text-blue-600">CloudDrive</h1>
+            <a href="/signedin/signout" class="hover:underline text-sm ml-2 text-black">Sign out</a>
+        </div>
         <div class="flex gap-2">
             <input 
                 type="text" 
