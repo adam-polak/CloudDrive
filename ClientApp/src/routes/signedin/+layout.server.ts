@@ -13,7 +13,7 @@ export const load = async (event) => {
 
     try {
         const result = await event.fetch(
-            `/userapi/loginkey?loginkey=${user.LoginKey}`
+            `/userapi/checkloginkey?loginkey=${user.LoginKey}`
         );
 
         if(result.status != 200) {

@@ -41,7 +41,7 @@ export enum ValidPassword {
 export function validPassword(value: string) {
     if(hasSpace(value)) return ValidPassword.Space;
     
-    if(value.length < 8) return ValidPassword.Length;
+    if(value.length < 6) return ValidPassword.Length;
 
     return ValidPassword.OK;
 }

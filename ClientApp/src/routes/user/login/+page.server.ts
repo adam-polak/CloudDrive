@@ -45,8 +45,6 @@ export const actions: Actions = {
                 }
             );
 
-            console.log(result.status);
-
             if(result.status != 200) {
                 return {
                     message: "Invalid username or password"
