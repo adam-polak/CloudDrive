@@ -12,8 +12,8 @@ export const load = async (event) => {
 }
 
 export const actions: Actions = {
-    default: async (event) => {
-        const formData = await event.request.formData();
+    default: async ({ cookies, request, fetch }) => {
+        const formData = await request.formData();
 
         const username = formData.get("username")?.toString() ?? "";
         const usernameIsValid = validUsername(username) == ValidUser.OK;
@@ -38,7 +38,7 @@ export const actions: Actions = {
 
         // Verify login with backend
         try {
-            const result = await event.fetch(
+            const result = await fetch(
                 `/userapi/login/${username}/${password}`,
                 {
                     method: "POST"
@@ -54,15 +54,23 @@ export const actions: Actions = {
             const loginKey = await result.text();
 
             const user: User = {
-                LoginKey: loginKey,
+                // need to encode loginkey otherwise if there is a `+` it will be received as a ` ` on backend
+                LoginKey: encodeURIComponent(loginKey),
                 Username: username
             }
 
-            event.cookies.set("user", JSON.stringify(user), {
+            if(cookies.get("user") != null) {
+                cookies.delete("user", {
+                    path: "/"
+                });
+            }
+
+            cookies.set("user", JSON.stringify(user), {
                 path: "/"
             });
 
             return redirect(302, "/signedin");
+
         } catch {
             return {
                 message: "Server error"

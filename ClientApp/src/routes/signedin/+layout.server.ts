@@ -3,27 +3,27 @@
 import { redirect } from "@sveltejs/kit";
 import type { User } from "$lib/user";
 
-export const load = async (event) => {
+export const load = async ({ cookies, fetch }) => {
 
-    const userJson: string | undefined = event.cookies.get("user");
+    const userJson: string | undefined = cookies.get("user");
 
     if(!userJson) return redirect(302, "/user/login");
 
     const user: User = JSON.parse(userJson);
 
     try {
-        const result = await event.fetch(
+        const result = await fetch(
             `/userapi/checkloginkey?loginkey=${user.LoginKey}`
         );
 
         if(result.status != 200) {
-            event.cookies.delete("user", {
+            cookies.delete("user", {
                 path: "/"
             });
             return redirect(302, "/user/login");
         }
     } catch(e) {
-        event.cookies.delete("user", {
+        cookies.delete("user", {
             path: "/"
         });
         return redirect(302, "/user/login");
