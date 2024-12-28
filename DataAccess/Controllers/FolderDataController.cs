@@ -45,7 +45,7 @@ public class FolderDataController
         DeleteNestedFolders(userId, folderId);
 
         string sql = "DELETE FROM folder_table"
-                    + " WHERE ownerid = @ownerid AND folderid = @folderid;";
+                    + " WHERE ownerid = @ownerid AND id = @folderid;";
         
         object[] parameters = { new { ownerid = userId, folderid = folderId } };
         

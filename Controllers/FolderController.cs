@@ -80,7 +80,7 @@ public class FolderController : ControllerBase
 
         if(!request.Query.TryGetValue("folderid", out StringValues value)) 
         {
-            return BadRequest();
+            return BadRequest("FolderId missing from query params");
         }
 
         try {
