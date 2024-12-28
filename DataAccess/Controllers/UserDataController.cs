@@ -88,9 +88,11 @@ public class UserDataController
     public void DeleteUser(int id)
     {
         string sql = "DELETE FROM user_table WHERE id = @id;";
+        
+        object[] parameters = { new { id = id } };
 
         _connection.Open();
-        _connection.Execute(sql, new { id = id });
+        _connection.Execute(sql, parameters);
         _connection.Close();
     }
 
