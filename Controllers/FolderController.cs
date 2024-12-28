@@ -16,37 +16,77 @@ public class FolderController : ControllerBase
         _userDataController = new UserDataController();
     }
 
-    [HttpPost("createfolder")]
-    public IActionResult CreateFolder()
+    private string GetLoginKey(HttpRequest request)
     {
-        HttpRequest request = HttpContext.Request;
-
-        if(!request.Query.TryGetValue("loginkey", out StringValues values)) {
+        if(!request.Query.TryGetValue("loginkey", out StringValues value)) {
             throw new InvalidOperationException(
                 "LoginMiddleware shouldn't allow program to this point if loginkey isn't present in query params"
                 );
         }
 
-        string loginKey = values.ToString();
-        int userId = _userDataController.GetUserId(loginKey);
+        return value.ToString();
+    }
 
-        if(!request.Query.TryGetValue("foldername", out StringValues value)) {
+    private int GetUserId(string loginKey)
+    {
+        return _userDataController.GetUserId(loginKey);
+    }
+
+    private int GetUserId(HttpRequest request)
+    {
+        return GetUserId(GetLoginKey(request));
+    }
+
+    [HttpPost("createfolder")]
+    public IActionResult CreateFolder()
+    {
+        HttpRequest request = HttpContext.Request;
+
+        int userId = GetUserId(request);
+
+        if(!request.Query.TryGetValue("foldername", out StringValues value)) 
+        {
             return BadRequest();
         }
 
         string folderName = value.ToString();
 
-        if(!request.Query.TryGetValue("folderid", out value)) {
+        if(!request.Query.TryGetValue("folderid", out value)) 
+        {
             return BadRequest();
         }
 
         try {
             int parentId = int.Parse(value.ToString());
-            if(_folderDataController.ContainsFolder(parentId, folderName)) {
+            if(_folderDataController.ContainsFolder(parentId, folderName)) 
+            {
                 return Conflict();
             }
 
             _folderDataController.CreateFolder(userId, parentId, folderName);
+
+            return Ok();
+        } catch {
+            return BadRequest();
+        }
+    }
+
+    [HttpPost("deletefolder")]
+    public IActionResult DeleteFolder()
+    {
+        HttpRequest request = HttpContext.Request;
+
+        int userId = GetUserId(request);
+
+        if(!request.Query.TryGetValue("folderid", out StringValues value)) 
+        {
+            return BadRequest();
+        }
+
+        try {
+            int folderId = int.Parse(value.ToString());
+
+            _folderDataController.DeleteFolder(userId, folderId);
 
             return Ok();
         } catch {
