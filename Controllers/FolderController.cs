@@ -1,6 +1,8 @@
 using CloudDrive.DataAccess.Controllers;
+using CloudDrive.DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json;
 
 namespace CloudDrive.Controllers;
 
@@ -89,6 +91,37 @@ public class FolderController : ControllerBase
             _folderDataController.DeleteFolder(userId, folderId);
 
             return Ok();
+        } catch {
+            return BadRequest();
+        }
+    }
+
+    [HttpGet("getcontents")]
+    public IActionResult GetContents()
+    {
+        HttpRequest request = HttpContext.Request;
+
+        int userId = GetUserId(request);
+
+        if(!request.Query.TryGetValue("folderid", out StringValues value)) 
+        {
+            return BadRequest("FolderId missing from query params");
+        }
+
+        try {
+            int folderId = int.Parse(value.ToString());
+
+            List<Folder> folders = _folderDataController.GetNestedFolders(userId, folderId);
+            List<FileModel> files = _folderDataController.GetFilesInFolder(folderId);
+
+            object response = new {
+                folders = folders,
+                files = files
+            };
+
+            string json = JsonConvert.SerializeObject(response);
+
+            return Ok(json);
         } catch {
             return BadRequest();
         }
