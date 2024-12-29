@@ -42,7 +42,6 @@ public class UserController : ControllerBase
             }
             _userDataController.CreateUser(username, password);
             int userId = _userDataController.GetUserId(username, password);
-            _folderDataController.CreateFolder(userId, 0, "root");
             return Ok();
         } catch {
             return BadRequest();

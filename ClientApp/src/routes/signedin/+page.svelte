@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    let { user } = $props();
-    
+    let { data } = $props();
+
 </script>
 
 <div class="bg-gray-100 min-h-screen flex flex-col">
@@ -24,7 +24,9 @@
 
     <!-- Main Content -->
     <main class="flex-grow p-6">
-        <button class="mb-3 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Back</button>
+        {#if data.currentFolder != null && data.currentFolder.Id != 0}
+            <button class="mb-3 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Back</button>
+        {/if}
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             <!-- Example Folder Item -->
             <div class="bg-white shadow rounded-lg p-4 text-center">
