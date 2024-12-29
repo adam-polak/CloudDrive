@@ -115,8 +115,8 @@ public class FolderController : ControllerBase
             List<FileModel> files = _folderDataController.GetFilesInFolder(folderId);
 
             object response = new {
-                folders = folders,
-                files = files
+                Folders = folders,
+                Files = files
             };
 
             string json = JsonConvert.SerializeObject(response);

@@ -1,4 +1,4 @@
-import type { User } from "$lib/user";
+import type { User } from "$lib/types";
 import { ValidPassword, validPassword, ValidUser, validUsername } from "$lib/validateText";
 import { redirect, type Actions } from "@sveltejs/kit"
 

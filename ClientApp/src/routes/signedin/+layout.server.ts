@@ -1,7 +1,7 @@
 // @ts-ignore
 
 import { redirect } from "@sveltejs/kit";
-import type { User } from "$lib/user";
+import type { User } from "$lib/types";
 
 export const load = async ({ cookies, fetch }) => {
 

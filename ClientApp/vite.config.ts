@@ -6,6 +6,7 @@ export default defineConfig({
 	server: {
 		proxy: {
 			'/userapi': 'http://localhost:5141',
+			'/folderapi': 'http://localhost:5141'
 		}
 	}
 });
