@@ -26,6 +26,12 @@
 
     <!-- Main Content -->
     <main class="flex-grow p-6">
+        <div class="p-4 bg-gray-100 rounded-lg shadow-md mb-6 flex items-center gap-2">
+            <h1 class="text-xl">Path:</h1>
+            <div class="bg-blue-400 text-white px-2 py-2 rounded-md">
+                <span><h4>{data.folderPath}</h4></span>
+            </div>
+        </div>
         {#if data.currentFolder != null && data.currentFolder.Id != 0}
             <form method="POST" action="?/backFolder">
                 <input type="hidden" name="parentId" value={data.currentFolder.ParentId} />

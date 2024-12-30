@@ -73,6 +73,36 @@ public class FolderController : ControllerBase
         }
     }
 
+    [HttpGet("getpath")]
+    public IActionResult GetPath()
+    {
+        HttpRequest request = HttpContext.Request;
+
+        int userId = GetUserId(request);
+
+        if(!request.Query.TryGetValue("folderid", out StringValues value))
+        {
+            return BadRequest("FolderId missing from query params");
+        }
+
+        try {
+            int folderId = int.Parse(value.ToString());
+
+            Folder folder = _folderDataController.GetFolder(userId, folderId);
+            string path = "/" + folder.Folder_Name;
+            while(folder.ParentId != 0)
+            {
+                folderId = folder.ParentId;
+                folder = _folderDataController.GetFolder(userId, folderId);
+                path = "/" + folder.Folder_Name + path;
+            }
+
+            return Ok(path);
+        } catch {
+            return BadRequest();
+        }
+    }
+
     [HttpGet("getfolder")]
     public IActionResult GetFolder()
     {
