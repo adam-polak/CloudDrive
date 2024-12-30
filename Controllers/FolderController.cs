@@ -73,6 +73,31 @@ public class FolderController : ControllerBase
         }
     }
 
+    [HttpGet("getfolder")]
+    public IActionResult GetFolder()
+    {
+        HttpRequest request = HttpContext.Request;
+        
+        int userId = GetUserId(request);
+
+        if(!request.Query.TryGetValue("folderid", out StringValues value))
+        {
+            return BadRequest("FolderId missing from query params");
+        }
+
+        try {
+            int folderId = int.Parse(value.ToString());
+
+            Folder folder = _folderDataController.GetFolder(userId, folderId);
+
+            string json = JsonConvert.SerializeObject(folder);
+
+            return Ok(json);
+        } catch {
+            return BadRequest();
+        }
+    }
+
     [HttpPost("deletefolder")]
     public IActionResult DeleteFolder()
     {
