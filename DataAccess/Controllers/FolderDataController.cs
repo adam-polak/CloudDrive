@@ -90,6 +90,18 @@ public class FolderDataController
 
     }
 
+    public Folder GetFolder(int userId, int folderId)
+    {
+        string sql = "SELECT * FROM folder_table"
+                    + " WHERE ownerid = @ownerid AND id = @id";
+
+        _connection.Open();
+        Folder folder = _connection.Query<Folder>(sql, new { ownerid = userId, id = folderId }).First();
+        _connection.Close();
+
+        return folder;
+    }
+
     public List<Folder> GetNestedFolders(int userId, int folderId)
     {
         string sql = "SELECT * FROM folder_table"
