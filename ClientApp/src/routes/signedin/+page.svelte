@@ -1,8 +1,23 @@
 <script lang="ts">
+    import type { FolderModel } from '$lib/types.js';
+
 
     let { data } = $props();
 
+    let folders = $state(data.contents?.Folders);
+    let files = $state(data.contents?.Files);
     let switchFolderJson = $state("");
+
+    async function deleteFolder(folder: FolderModel) {
+        if(folders == null) return;
+
+        folders = folders.filter(x => x.Id != folder.Id);
+
+        fetch("/signedin/deleteFolder", {
+                method: "POST",
+                body: `${folder.Id}`
+        });
+    }
 
 </script>
 
@@ -38,25 +53,30 @@
                 <button class="mb-3 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Back</button>
             </form>
         {/if}
-        {#if data.contents}
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        {#if folders && files}
+            <div class="flex flex-col mx-auto">
                 <form method="POST" action="?/switchfolder">
                     <input type="hidden" name="switchFolderJson" value={switchFolderJson} />
-                    {#each data.contents.Folders as folder}
-                        <button type="submit" onclick={() => { switchFolderJson = JSON.stringify(folder); }}>
-                            <div class="bg-white shadow rounded-lg p-4 text-center">
-                                <div class="text-blue-500 mb-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10 mx-auto">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 7a2 2 0 012-2h3.5a2 2 0 011.44.56l1.12 1.12c.37.37.88.56 1.44.56H19a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
-                                    </svg>
-                                </div>
-                                <p class="text-sm font-semibold">{folder.Folder_Name}</p>
+                    <div class="flex flex-row gap-2 ml-3 flex-wrap w-[100%]">
+                        {#each folders as folder}
+                            <div class="bg-white shadow rounded-lg flex-col p-2 text-center w-24">
+                                <button type="button" onclick={() => deleteFolder(folder)} class="bg-red-400 hover:bg-red-500 text-white w-16 shadow rounded-sm mb-2">X</button>
+                                <button type="submit" onclick={() => { switchFolderJson = JSON.stringify(folder); }}>
+                                    <div class="bg-white hover:bg-gray-100 shadow rounded-lg p-4 text-center">
+                                        <div class="text-blue-500 mb-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10 mx-auto">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7a2 2 0 012-2h3.5a2 2 0 011.44.56l1.12 1.12c.37.37.88.56 1.44.56H19a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
+                                            </svg>
+                                        </div>
+                                        <p class="text-sm font-semibold">{folder.Folder_Name}</p>
+                                    </div>
+                                </button>
                             </div>
-                        </button>
-                    {/each}
+                        {/each}
+                    </div>
                 </form>
                 
-                {#each data.contents.Files as file}
+                {#each files as file}
                     <div class="bg-white shadow rounded-lg p-4 text-center">
                         <div class="text-gray-500 mb-2">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10 mx-auto">

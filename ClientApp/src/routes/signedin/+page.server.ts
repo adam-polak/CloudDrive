@@ -169,5 +169,9 @@ export const actions: Actions = {
                 message: "Operation failed try again"
             }
         }
+    },
+    deleteFolder: async ({ request, fetch }) => {
+        console.log("deleting");
+        return {}
     }
 }
