@@ -4,8 +4,8 @@
 
     let { data } = $props();
 
-    let folders = $state(data.contents?.Folders);
-    let files = $state(data.contents?.Files);
+    let folders = $state(data.contents?.Folders ?? []);
+    let files = $state(data.contents?.Files ?? []);
     let switchFolderJson = $state("");
 
     async function deleteFolder(folder: FolderModel) {
@@ -53,7 +53,7 @@
                 <button class="mb-3 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Back</button>
             </form>
         {/if}
-        {#if folders && files}
+        {#if data.contents}
             <div class="flex flex-col mx-auto">
                 <form method="POST" action="?/switchfolder">
                     <input type="hidden" name="switchFolderJson" value={switchFolderJson} />
