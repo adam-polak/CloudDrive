@@ -15,7 +15,7 @@ async function getFolderPath(fetch: any, loginKey: string, folderId: number) {
 }
 
 
-export const load = async ({ cookies, fetch }) => {
+export const load = async ({ cookies, fetch }: { cookies: any, fetch: any }) => {
 
     const userJson = cookies.get("user");
     if(userJson == null) {
