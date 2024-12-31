@@ -34,7 +34,7 @@
                 placeholder="Search folder..." 
                 class="border rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
-            <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Create Folder</button>
+            <a href="signedin/createFolder" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Create Folder</a>
             <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Upload File</button>
         </div>
     </header>
