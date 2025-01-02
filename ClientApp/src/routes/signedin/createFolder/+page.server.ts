@@ -1,3 +1,4 @@
+import type { FolderModel } from "$lib/types";
 import { redirect, type Actions } from "@sveltejs/kit"
 
 export const load = async ({ cookies } : { cookies: any }) => {
@@ -37,7 +38,7 @@ export const actions: Actions = {
             }
         }
 
-        const folder = JSON.parse(folderJson);
+        const folder: FolderModel = JSON.parse(folderJson);
 
         const formData = await request.formData();
 
@@ -59,9 +60,9 @@ export const actions: Actions = {
                 }
             );
 
-            if(response.status != 200) {
+            if(response.status == 409) {
                 return {
-                    message: "Try again"
+                    message: `Folder name: "${newFolderName}" already exists in ${folder.Folder_Name}`
                 }
             }
 
