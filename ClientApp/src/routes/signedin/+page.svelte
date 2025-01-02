@@ -42,9 +42,10 @@
         class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
         >Create Folder</a
       >
-      <button
+      <a
+        href="signedin/uploadFile"
         class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-        >Upload File</button
+        >Upload File</a
       >
     </div>
   </header>
