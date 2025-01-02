@@ -6,8 +6,6 @@
   let folders = $state(data.contents?.Folders ?? []);
   let files = $state(data.contents?.Files ?? []);
   let switchFolderJson = $state("");
-  let showFolderDeleteId = $state(0);
-  let hoverCount = $state(0);
 
   async function deleteFolder(folder: FolderModel) {
     if (folders == null) return;
