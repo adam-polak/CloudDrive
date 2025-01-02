@@ -15,7 +15,7 @@ async function getFolderPath(fetch: any, loginKey: string, folderId: number) {
 }
 
 
-export const load = async ({ cookies, fetch }) => {
+export const load = async ({ cookies, fetch }: { cookies: any, fetch: any }) => {
 
     const userJson = cookies.get("user");
     if(userJson == null) {
@@ -34,6 +34,9 @@ export const load = async ({ cookies, fetch }) => {
             Folder_Name: "root",
             ParentId: 0
         }
+        cookies.set("currentFolder", JSON.stringify(folder), {
+            path: "/"
+        });
     } else {
         folder = JSON.parse(folderJson);
     }
