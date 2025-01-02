@@ -29,7 +29,13 @@
             >
               Choose File
             </div>
-            {#if fileName}<div class="mt-1"><p>{fileName}</p></div>{/if}
+            <div class="mt-1">
+              {#if fileName}
+                <p>{fileName}</p>
+              {:else}
+                <p>no file selected...</p>
+              {/if}
+            </div>
           </div>
         </label>
         <input
