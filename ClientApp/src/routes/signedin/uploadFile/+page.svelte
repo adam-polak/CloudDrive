@@ -1,8 +1,6 @@
 <script lang="ts">
   let { form } = $props();
 
-  console.log(form);
-
   let files: FileList | undefined = $state();
 
   let data: any = $state();
