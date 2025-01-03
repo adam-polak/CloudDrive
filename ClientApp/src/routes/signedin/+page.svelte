@@ -6,8 +6,6 @@
   let folders = $state(data.contents?.Folders ?? []);
   let files = $state(data.contents?.Files ?? []);
   let switchFolderJson = $state("");
-  let showFolderDeleteId = $state(0);
-  let hoverCount = $state(0);
 
   async function deleteFolder(folder: FolderModel) {
     if (folders == null) return;
@@ -44,9 +42,10 @@
         class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
         >Create Folder</a
       >
-      <button
+      <a
+        href="signedin/uploadFile"
         class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-        >Upload File</button
+        >Upload File</a
       >
     </div>
   </header>
