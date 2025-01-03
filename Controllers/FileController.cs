@@ -14,4 +14,26 @@ public class FileController : ControllerBase
         _fileDataController = new FileDataController();
     }
 
+    [HttpGet("getfiles")]
+    public IActionResult GetFiles()
+    {
+        // TODO
+        return Ok();
+    }
+
+    [HttpPost("uploadfile")]
+    public IActionResult UploadFile()
+    {
+        // TODO
+            // - upload to blob first, then create in db
+        return Ok();
+    }
+
+    [HttpPost("deletefile")]
+    public IActionResult DeleteFile()
+    {
+        // TODO
+        return Ok();
+    }
+
 }
