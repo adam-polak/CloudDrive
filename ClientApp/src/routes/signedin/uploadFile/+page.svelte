@@ -1,4 +1,8 @@
 <script lang="ts">
+  let { form } = $props();
+
+  console.log(form);
+
   let files: FileList | undefined = $state();
 
   let data: any = $state();
@@ -40,6 +44,11 @@
       class="text-center p-4 mx-auto mt-10 w-[70vw] md:w-[60vw] lg:w-[40vw] h-[32vh] rounded-md shadow bg-white"
     >
       <h1 class="text-2xl mb-8">Upload File</h1>
+      {#if form?.message}
+        <h4 class="text-center mt-[-1em] mb-2 text-md text-red-400">
+          *{form?.message}
+        </h4>
+      {/if}
       <form method="POST" action="">
         <div class="mb-10">
           <label for="file" class="file-upload">
