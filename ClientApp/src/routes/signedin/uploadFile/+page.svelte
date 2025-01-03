@@ -1,5 +1,10 @@
 <script lang="ts">
   let fileName = $state(null);
+
+  function displayFileName(name: string) {
+    const arr = name.split("\\");
+    return arr[arr.length - 1];
+  }
 </script>
 
 <div>
@@ -16,8 +21,7 @@
   </header>
   <main>
     <div
-      class="text-center p-4 mx-auto mt-10 w-96 h-[30vh] rounded-md
-      shadow bg-white"
+      class="text-center p-4 mx-auto mt-10 w-[70vw] md:w-[60vw] lg:w-[40vw] h-[32vh] rounded-md shadow bg-white"
     >
       <h1 class="text-2xl mb-8">Upload File</h1>
       <form method="POST" action="">
@@ -26,13 +30,15 @@
             <div class="flex gap-3">
               <div
                 style="cursor: pointer;"
-                class="shadow py-1 px-3 bg-blue-400 text-white rounded-md"
+                class="md:w-32 shadow py-1 px-3 bg-blue-400 text-white rounded-md"
               >
                 Choose File
               </div>
               <div class="mt-1">
                 {#if fileName}
-                  <p>{fileName}</p>
+                  <p class="w-[100%] h-6 overflow-hidden">
+                    {displayFileName(fileName)}
+                  </p>
                 {:else}
                   <p>no file selected...</p>
                 {/if}
@@ -44,6 +50,7 @@
             type="file"
             id="file"
             name="file"
+            bind:value={fileName}
           />
         </div>
         <div class="mt-3 flex justify-between w-[100%]">
