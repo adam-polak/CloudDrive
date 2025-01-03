@@ -1,10 +1,26 @@
 <script lang="ts">
-  let fileName: any = $state(null);
+  let files: FileList | undefined = $state();
 
-  function displayFileName(name: string) {
+  let data: any = $state();
+
+  function displayFileName(name: any) {
     const arr = name.split("\\");
     return arr[arr.length - 1];
   }
+
+  $effect(() => {
+    if (!(files && files[0])) {
+      data = undefined;
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      data = reader.result;
+    };
+
+    reader.readAsDataURL(files[0]);
+  });
 </script>
 
 <div>
@@ -35,11 +51,14 @@
                 Choose File
               </div>
               <div class="mt-1">
-                {#if fileName}
+                {#if data && files}
                   <p class="w-[100%] h-6 overflow-hidden">
-                    {displayFileName(fileName)}
+                    {displayFileName(files[0].name)}
                   </p>
-                  <input type="hidden" name="fileName" value={fileName} />
+                  <input type="hidden" name="data" value={data} />
+                  <input type="hidden" name="name" value={files[0].name} />
+                {:else if files}
+                  <p>loading...</p>
                 {:else}
                   <p>no file selected...</p>
                 {/if}
@@ -51,7 +70,7 @@
             type="file"
             id="file"
             name="file"
-            bind:value={fileName}
+            bind:files
           />
         </div>
         <div class="mt-3 flex justify-between w-[100%]">

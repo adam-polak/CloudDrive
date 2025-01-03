@@ -15,7 +15,8 @@ export const load = async ({ cookies, fetch }: { cookies: any, fetch: any }) => 
 }
 
 export const actions: Actions = {
-  default: async ({ cookies, request }) => {
+  default: async ({ cookies, request, fetch }) => {
+
     const userJson = cookies.get("user");
     if(userJson == null) {
       return redirect(302, "/user/login");
@@ -34,21 +35,28 @@ export const actions: Actions = {
 
     try {
 
-      const fileURL = formData.get("file");
+      const fileName = formData.get("name");
+      const data = formData.get("data");
 
-      console.log(fileURL);
-
-      if(fileURL == null) {
+      if(fileName == null) {
         return {
           message: "Must choose a file"
         }
       }
 
+      if(data == null) {
+        return {
+          message: "Try again"
+        }
+      }
+
+      const bodyObj = { name: fileName, data: data };
+
       const result = await fetch(
         `/fileapi/uploadfile?loginkey=${user.LoginKey}&folderid=${folder.Id}`,
         {
           method: "POST",
-          body: "<insert body>",
+          body: JSON.stringify(bodyObj),
           headers: {
             "Content-Type": "application/json"
           }
@@ -61,14 +69,12 @@ export const actions: Actions = {
         }
       }
 
-
-
     } catch {
       return {
         message: "Server error"
       }
     }
-      
 
+    return redirect(302, "/signedin");
   }
 }
