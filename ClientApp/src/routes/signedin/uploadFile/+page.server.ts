@@ -1,5 +1,16 @@
 import { User, FolderModel } from "$lib/types";
 
+function getBase64(fileURL) {
+  const reader = new FileReader();
+  console.log("starting read...");
+  return new Promise(resolve => {
+    reader.onload = async () => {
+      resolve(reader.result);
+    };
+    reader.readAsDataURL(fileURL);
+  });
+}
+
 export const load = async ({ cookies, fetch }: { cookies: any, fetch: any }) => {
 }
 
@@ -23,9 +34,11 @@ export const actions: Actions = {
 
     try {
 
-      const file = formData.get("file");
+      const fileURL = formData.get("file");
 
-      if(file == null) {
+      console.log(fileURL);
+
+      if(fileURL == null) {
         return {
           message: "Must choose a file"
         }

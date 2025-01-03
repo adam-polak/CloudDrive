@@ -1,5 +1,5 @@
 <script lang="ts">
-  let fileName = $state(null);
+  let fileName: any = $state(null);
 
   function displayFileName(name: string) {
     const arr = name.split("\\");
@@ -39,6 +39,7 @@
                   <p class="w-[100%] h-6 overflow-hidden">
                     {displayFileName(fileName)}
                   </p>
+                  <input type="hidden" name="fileName" value={fileName} />
                 {:else}
                   <p>no file selected...</p>
                 {/if}
