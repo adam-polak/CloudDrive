@@ -1,18 +1,5 @@
-import { User, FolderModel } from "$lib/types";
-
-function getBase64(fileURL) {
-  const reader = new FileReader();
-  console.log("starting read...");
-  return new Promise(resolve => {
-    reader.onload = async () => {
-      resolve(reader.result);
-    };
-    reader.readAsDataURL(fileURL);
-  });
-}
-
-export const load = async ({ cookies, fetch }: { cookies: any, fetch: any }) => {
-}
+import type { FolderModel, User } from "$lib/types";
+import { redirect, type Actions } from "@sveltejs/kit";
 
 export const actions: Actions = {
   default: async ({ cookies, request, fetch }) => {

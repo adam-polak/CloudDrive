@@ -69,8 +69,11 @@ export const load = async ({ cookies, fetch }: { cookies: any, fetch: any }) => 
                     folderPath = path;
                 }
             }
-
         }
+
+        cookies.set("currentFolder", JSON.stringify(folder), {
+            path: "/"
+        });
 
         return {
             currentFolder: folder,

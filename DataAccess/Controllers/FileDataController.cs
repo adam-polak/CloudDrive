@@ -33,7 +33,7 @@ public class FileDataController
     {
         string sql = "INSERT INTO file_table"
                     + " (folderid, file_name)"
-                    + " VALUES ( @folderid, @file_name);";
+                    + " VALUES ( @folderid, @file_name );";
         object[] parameters = { new { folderid = folderId, file_name = fileName } };
 
        DoCommand(sql, parameters); 
