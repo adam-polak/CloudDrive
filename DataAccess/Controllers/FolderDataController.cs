@@ -18,7 +18,7 @@ public class FolderDataController
     {
         string sql = "INSERT INTO folder_table"
                     + " (ownerid, folder_name, parentid)"
-                    + "VALUES ( @ownerid, @folder_name, @parentid );";
+                    + " VALUES ( @ownerid, @folder_name, @parentid );";
 
         object[] parameters = { new { ownerid = userId, folder_name = folderName, parentid = parentId } };
         
