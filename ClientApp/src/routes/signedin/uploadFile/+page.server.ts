@@ -50,7 +50,7 @@ export const actions: Actions = {
         }
       }
 
-      const bodyObj = { name: fileName, data: data };
+      const bodyObj = { Name: fileName, Data: data };
 
       const result = await fetch(
         `/fileapi/uploadfile?loginkey=${user.LoginKey}&folderid=${folder.Id}`,
