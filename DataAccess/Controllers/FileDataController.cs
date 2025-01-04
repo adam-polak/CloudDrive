@@ -1,4 +1,5 @@
 using System.Data.Common;
+using System.Reflection.Metadata.Ecma335;
 using CloudDrive.DataAccess.Lib;
 using CloudDrive.DataAccess.Models;
 using Dapper;
@@ -65,6 +66,16 @@ public class FileDataController
         object[] parameters = { new { id = fileId, folderid = folderId, file_name = name } };
 
         DoCommand(sql, parameters);
+    }
+
+    public bool ContainsFileName(int folderId, string name)
+    {
+        string sql = "SELECT * FROM file_table"
+                    + " WHERE folderid = @folderid AND file_name = @file_name;";
+
+        return DoQuery<FileModel>(sql, new { folderid = folderId, file_name = name } )
+                .AsList()
+                .Count != 0;
     }
 
     public FileModel GetFile(int folderId, int fileId)
