@@ -1,4 +1,4 @@
-namespace CloudDrive.BlobAccess;
+namespace CloudDrive.BlobAccess.Controllers;
 
 public class BlobFileController
 {
