@@ -24,8 +24,12 @@ public class FileController : ControllerBase
     [HttpPost("uploadfile")]
     public IActionResult UploadFile()
     {
+        // folderid, file name
         // TODO
-            // - upload to blob first, then create in db
+            // - check if db contains name
+            // - create in db
+                // - if fails, delete in db
+            // - create in blob ({folderid}_{fileid}.json)
         return Ok();
     }
 
