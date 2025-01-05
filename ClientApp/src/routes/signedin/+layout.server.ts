@@ -3,7 +3,7 @@
 import { redirect } from "@sveltejs/kit";
 import type { User } from "$lib/types";
 
-export const load = async ({ cookies, fetch }) => {
+export const load = async ({ cookies, fetch }: { cookies: any, fetch: any}) => {
 
     const userJson: string | undefined = cookies.get("user");
 
@@ -30,6 +30,6 @@ export const load = async ({ cookies, fetch }) => {
     }
 
     return {
-        user: user
+        RootFolderId: user.RootFolderId
     }
 }

@@ -60,12 +60,12 @@
         <span><h4>{data.folderPath}</h4></span>
       </div>
     </div>
-    {#if data.currentFolder != null && data.currentFolder.Id != 0}
+    {#if data.currentFolder?.Id != data.RootFolderId}
       <form method="POST" action="?/backFolder">
         <input
           type="hidden"
           name="parentId"
-          value={data.currentFolder.ParentId}
+          value={data.currentFolder?.ParentId}
         />
         <button
           class="mb-3 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"

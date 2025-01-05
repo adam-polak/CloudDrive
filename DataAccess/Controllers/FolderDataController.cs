@@ -14,6 +14,11 @@ public class FolderDataController
         _connection = DbConnectionHandler.CreateDbConnection();
     }
 
+    public void CreateRootFolder(int userId)
+    {
+        CreateFolder(userId, 0, "root");
+    }
+
     public void CreateFolder(int userId, int parentId, string folderName)
     {
         string sql = "INSERT INTO folder_table"
@@ -100,6 +105,17 @@ public class FolderDataController
         _connection.Close();
 
         return folder;
+    }
+
+    public Folder? GetRootFolder(int userId)
+    {
+        string sql = "SELECT * FROM folder_table"
+                    + " WHERE ownerid = @ownerid AND parentid = 0;";
+        
+        _connection.Open();
+        List<Folder> list = _connection.Query<Folder>(sql, new { ownerid = userId }).AsList();
+        _connection.Close();
+        return list.FirstOrDefault();
     }
 
     public List<Folder> GetNestedFolders(int userId, int folderId)

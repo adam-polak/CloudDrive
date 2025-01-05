@@ -1,5 +1,4 @@
 using System.Data.Common;
-using System.Reflection.Metadata.Ecma335;
 using CloudDrive.DataAccess.Lib;
 using CloudDrive.DataAccess.Models;
 using Dapper;
@@ -34,7 +33,7 @@ public class FileDataController
     {
         string sql = "INSERT INTO file_table"
                     + " (folderid, file_name)"
-                    + " VALUES ( @folderid, @file_name);";
+                    + " VALUES ( @folderid, @file_name );";
         object[] parameters = { new { folderid = folderId, file_name = fileName } };
 
        DoCommand(sql, parameters); 
@@ -78,14 +77,23 @@ public class FileDataController
                 .Count != 0;
     }
 
-    public FileModel GetFile(int folderId, int fileId)
+    public FileModel? GetFile(int folderId, int fileId)
     {
         string sql = "SELECT * FROM file_table"
                     + " WHERE folderid = @folderid AND id = @id;";
         
         object parameters = new { folderid = folderId, id = fileId };
 
-        return DoQuery<FileModel>(sql, parameters).First();
+        return DoQuery<FileModel>(sql, parameters).FirstOrDefault();
+    }
+
+    public FileModel? GetFile(int folderId, string fileName)
+    {
+        string sql = "SELECT * FROM file_table"
+                    + " WHERE folderid = @folderid AND file_name = @file_name;";
+        object parameters = new { folderid = folderId, file_name = fileName };
+
+        return DoQuery<FileModel>(sql, parameters).FirstOrDefault();
     }
 
     public List<FileModel> GetFilesInFolder(int folderId)

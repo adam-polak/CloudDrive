@@ -1,4 +1,5 @@
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using CloudDrive.BlobAccess.Lib;
 using CloudDrive.DataAccess.Models;
 
@@ -13,19 +14,44 @@ public class BlobFileController
         _blobClient = BlobConnectionHandler.CreateBlobConnection();
     }
 
-    public void UploadFile(FileModel file, string json)
+    private string GetBlobName(FileModel file)
     {
-        // TODO
+        return $"{file.FolderId}_{file.Id}.json";
     }
 
-    public void DeleteFile(FileModel file)
+    public async Task UploadFileAsync(FileModel file, string json)
     {
-        // TODO
+        string blobName = GetBlobName(file);
+
+        BlobClient client = _blobClient.GetBlobClient(blobName);
+
+        await client.UploadAsync(BinaryData.FromString(json), overwrite: true);
     }
 
-    public string GetFile(FileModel file)
+    public async Task UploadFileAsync(FileModel file, Stream stream)
     {
-        // TODO
-        return "";
+        string blobName = GetBlobName(file);
+
+        BlobClient client = _blobClient.GetBlobClient(blobName);
+
+        await client.UploadAsync(stream);
+    }
+
+    public async Task DeleteFile(FileModel file)
+    {
+        string blobName = GetBlobName(file);
+
+        await _blobClient.DeleteBlobIfExistsAsync(blobName);
+    }
+
+    public async Task<string> GetContentsAsString(FileModel file)
+    {
+        string blobName = GetBlobName(file);
+        
+        BlobClient client = _blobClient.GetBlobClient(blobName);
+
+        BlobDownloadResult downloadResult = await client.DownloadContentAsync();
+
+        return downloadResult.ToString() ?? "";
     }
 }

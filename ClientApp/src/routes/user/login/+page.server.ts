@@ -51,12 +51,17 @@ export const actions: Actions = {
                 }
             }
 
-            const loginKey = await result.text();
+            const body = JSON.parse(await result.text());
+
+            const loginKey = body.LoginKey;
+
+            const rootFolderId = body.RootFolderId;
 
             const user: User = {
                 // need to encode loginkey otherwise if there is a `+` it will be received as a ` ` on backend
                 LoginKey: encodeURIComponent(loginKey),
-                Username: username
+                Username: username,
+                RootFolderId: rootFolderId
             }
 
             if(cookies.get("user") != null) {
