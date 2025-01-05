@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { FolderModel } from "$lib/types.js";
+  import type { FileModel, FolderModel } from "$lib/types.js";
 
   let { data } = $props();
 
@@ -8,13 +8,20 @@
   let switchFolderJson = $state("");
 
   async function deleteFolder(folder: FolderModel) {
-    if (folders == null) return;
-
     folders = folders.filter((x) => x.Id != folder.Id);
 
     fetch("/signedin/deleteFolder", {
       method: "POST",
       body: `${folder.Id}`,
+    });
+  }
+
+  async function deleteFile(file: FileModel) {
+    files = files.filter((x) => x.Id != file.Id);
+
+    fetch("/signedin/deleteFile", {
+      method: "POST",
+      body: `${file.Id}`
     });
   }
 </script>
@@ -132,6 +139,7 @@
             <button
               type="button"
               style="position: absolute;"
+              onclick={() => deleteFile(file)}
               class="bg-red-400 mt-2 ml-4 hover:bg-red-500 text-white w-20 shadow rounded-sm mb-2"
               >X</button>
             <button class="bg-white hover:bg-gray-100 shadow rounded-lg pt-10 px-2 text-center h-32 w-28">

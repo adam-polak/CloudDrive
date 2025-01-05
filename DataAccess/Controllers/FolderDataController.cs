@@ -44,11 +44,6 @@ public class FolderDataController
 
     public void DeleteFolder(int userId, int folderId)
     {
-
-        // Clear folder contents first
-        DeleteFolderFiles(folderId);
-        DeleteNestedFolders(userId, folderId);
-
         string sql = "DELETE FROM folder_table"
                     + " WHERE ownerid = @ownerid AND id = @folderid;";
         
@@ -70,29 +65,6 @@ public class FolderDataController
         _connection.Open();
         _connection.Execute(sql, parameters);
         _connection.Close();
-    }
-
-    public void DeleteFolderFiles(int folderId)
-    {
-        string sql = "DELETE FROM file_table"
-                    + " WHERE folderid = @folderid;";
-
-        object[] parameters = { new { folderid = folderId } };
-
-        _connection.Open();
-        _connection.Execute(sql, parameters);
-        _connection.Close();
-    }
-
-    public void DeleteNestedFolders(int userId, int folderId)
-    {
-        List<Folder> folders = GetNestedFolders(userId, folderId);
-
-        foreach(Folder f in folders)
-        {
-            DeleteFolder(userId, f.Id);
-        }
-
     }
 
     public Folder GetFolder(int userId, int folderId)
@@ -129,17 +101,5 @@ public class FolderDataController
 
         return folders;
     }
-
-    public List<FileModel> GetFilesInFolder(int folderId)
-    {
-        string sql = "SELECT * FROM file_table"
-                    + " WHERE folderid = @folderid;";
-
-        _connection.Open();
-        List<FileModel> files = _connection.Query<FileModel>(sql, new { folderid = folderId }).ToList();
-        _connection.Close();
-
-        return files;
-    }
-    
+ 
 }
