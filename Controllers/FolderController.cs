@@ -1,3 +1,4 @@
+using CloudDrive.Controllers.Lib;
 using CloudDrive.DataAccess.Controllers;
 using CloudDrive.DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -10,12 +11,16 @@ namespace CloudDrive.Controllers;
 public class FolderController : ControllerBase
 {
     private FolderDataController _folderDataController;
+    private FileDataController _fileDataController;
     private UserDataController _userDataController;
+    private StorageManager _storageManager;
 
     public FolderController()
     {
+        _fileDataController = new FileDataController();
         _folderDataController = new FolderDataController();
         _userDataController = new UserDataController();
+        _storageManager = new StorageManager();
     }
 
     private string GetLoginKey(HttpRequest request)
@@ -129,7 +134,7 @@ public class FolderController : ControllerBase
     }
 
     [HttpPost("deletefolder")]
-    public IActionResult DeleteFolder()
+    public async Task<IActionResult> DeleteFolder()
     {
         HttpRequest request = HttpContext.Request;
 
@@ -143,7 +148,7 @@ public class FolderController : ControllerBase
         try {
             int folderId = int.Parse(value.ToString());
 
-            _folderDataController.DeleteFolder(userId, folderId);
+            await _storageManager.DeleteFolderAndContents(userId, folderId);
 
             return Ok();
         } catch {
@@ -167,7 +172,7 @@ public class FolderController : ControllerBase
             int folderId = int.Parse(value.ToString());
 
             List<Folder> folders = _folderDataController.GetNestedFolders(userId, folderId);
-            List<FileModel> files = _folderDataController.GetFilesInFolder(folderId);
+            List<FileModel> files = _fileDataController.GetFilesInFolder(folderId);
 
             object response = new {
                 Folders = folders,
