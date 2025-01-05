@@ -1,6 +1,6 @@
 import { redirect } from "@sveltejs/kit";
 
-export const load = (event) => {
+export const load = (event: any) => {
     event.cookies.delete("user", {
         path: "/"
     });

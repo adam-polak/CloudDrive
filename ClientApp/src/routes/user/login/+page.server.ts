@@ -7,7 +7,16 @@ export const load = async (event) => {
     if(event.cookies.get("user")) {
         redirect(302, "/signedin")
     }
-    
+
+    const cookies = event.cookies.getAll();
+
+    for(let i = 0; i < cookies.length; i++)
+    {
+        event.cookies.delete(cookies[i].name, {
+            path: "/"
+        });
+    }
+
     return {};
 }
 
