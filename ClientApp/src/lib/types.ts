@@ -1,6 +1,7 @@
 export type User = {
     LoginKey: string,
-    Username: string
+    Username: string,
+    RootFolderId: number
 }
 
 export type FolderModel = {

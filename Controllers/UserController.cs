@@ -1,6 +1,8 @@
 using CloudDrive.DataAccess.Controllers;
+using CloudDrive.DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json;
 
 namespace CloudDrive.Controllers;
 
@@ -15,7 +17,6 @@ public class UserController : ControllerBase
     {
         _userDataController = new UserDataController();
         _folderDataController = new FolderDataController();
-
     }
 
     [HttpPost("login/{username}/{password}")]
@@ -24,7 +25,22 @@ public class UserController : ControllerBase
         try {
             string? loginKey = _userDataController.LoginToUser(username, password);
             if(loginKey != null) {
-                return Ok(loginKey);
+                User user = _userDataController.GetUser(loginKey);
+
+                Folder? root = _folderDataController.GetRootFolder(user.Id);
+                if(root == null)
+                {
+                    _folderDataController.CreateRootFolder(user.Id);
+                    root = _folderDataController.GetRootFolder(user.Id);
+                    if(root == null)
+                    {
+                        return BadRequest("Error creating root folder");
+                    }
+                }
+
+                int rootFolderId = root.Id;
+                object response = new { LoginKey = loginKey, RootFolderId = rootFolderId };
+                return Ok(JsonConvert.SerializeObject(response));
             } else {
                 return Unauthorized();
             }
@@ -42,6 +58,9 @@ public class UserController : ControllerBase
             }
             _userDataController.CreateUser(username, password);
             int userId = _userDataController.GetUserId(username, password);
+            // Create root folder
+            _folderDataController.CreateRootFolder(userId);
+
             return Ok();
         } catch {
             return BadRequest();

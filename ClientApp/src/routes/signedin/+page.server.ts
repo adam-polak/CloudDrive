@@ -1,5 +1,5 @@
 import { addToPath, removeFromPath } from "$lib/folderpath";
-import type { FolderModel, GetContentsResponse } from "$lib/types";
+import type { FolderModel, GetContentsResponse, User } from "$lib/types";
 import { redirect, type Actions } from "@sveltejs/kit";
 
 async function getFolderPath(fetch: any, loginKey: string, folderId: number) {
@@ -28,18 +28,26 @@ export const load = async ({ cookies, fetch }: { cookies: any, fetch: any }) => 
 
     let folder: FolderModel;
     if(folderJson == null) {
-        folder = {
-            Id: 0,
-            OwnerId: 0,
-            Folder_Name: "root",
-            ParentId: 0
+        try {
+            const result = await fetch(
+                `/folderapi/getfolder?loginkey=${user.LoginKey}&folderid=${user.RootFolderId}`
+            );
+
+            const body = await result.text();
+
+            folder = JSON.parse(body);
+        } catch {
+            return {
+                message: "Error retrieving folder"
+            }
         }
-        cookies.set("currentFolder", JSON.stringify(folder), {
-            path: "/"
-        });
     } else {
         folder = JSON.parse(folderJson);
     }
+
+    cookies.set("currentFolder", JSON.stringify(folder), {
+        path: "/"
+    });
 
     try {
         const result = await fetch(
@@ -51,7 +59,7 @@ export const load = async ({ cookies, fetch }: { cookies: any, fetch: any }) => 
         const contents: GetContentsResponse = JSON.parse(body);
 
         let folderPath;
-        if(folder.Id == 0) {
+        if(folder.Id == user.RootFolderId) {
             folderPath = "/";
             cookies.set("folderPath", folderPath, {
                 path: "/"
@@ -71,10 +79,6 @@ export const load = async ({ cookies, fetch }: { cookies: any, fetch: any }) => 
             }
         }
 
-        cookies.set("currentFolder", JSON.stringify(folder), {
-            path: "/"
-        });
-
         return {
             currentFolder: folder,
             contents: contents,
@@ -89,6 +93,13 @@ export const load = async ({ cookies, fetch }: { cookies: any, fetch: any }) => 
 
 export const actions: Actions = {
     switchfolder: async ({ cookies, request }) => {
+        const userJson = cookies.get("user");
+        if(userJson == null) {
+            return redirect(302, "/user/login");
+        }
+
+        const user: User = JSON.parse(userJson);
+
         const formData = await request.formData();
 
         const switchFolderJson = formData.get("switchFolderJson");
@@ -105,7 +116,7 @@ export const actions: Actions = {
         
                 if(folderPath != null) {
                     let newPath;
-                    if(folder.ParentId != 0) {
+                    if(folder.ParentId != user.RootFolderId) {
                         newPath = addToPath(folderPath, folder.Folder_Name);
                     } else {
                         newPath = folderPath + folder.Folder_Name;
@@ -138,20 +149,6 @@ export const actions: Actions = {
         try {
             const parentId = parseInt(parentIdFormData?.toString() ?? "");
 
-            if(parentId == 0) {
-                const folder: FolderModel = {
-                    Id: 0,
-                    OwnerId: 0,
-                    Folder_Name: "root",
-                    ParentId: 0
-                }
-                cookies.set("currentFolder", JSON.stringify(folder), {
-                    path: "/"
-                });
-
-                return {}
-            }
-
             const result = await fetch(
                 `/folderapi/getfolder/?loginkey=${user.LoginKey}&folderid=${parentId}`
             );
@@ -175,9 +172,5 @@ export const actions: Actions = {
                 message: "Operation failed try again"
             }
         }
-    },
-    deleteFolder: async ({ request, fetch }) => {
-        console.log("deleting");
-        return {}
     }
 }
