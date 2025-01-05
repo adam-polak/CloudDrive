@@ -15,11 +15,13 @@ public class FileController : ControllerBase
 
     private FileDataController _fileDataController;
     private BlobFileController _blobFileController;
+    private StorageManager _storageManager;
 
     public FileController()
     {
         _fileDataController = new FileDataController();
         _blobFileController = new BlobFileController();
+        _storageManager = new StorageManager();
     }
 
     [HttpGet("getfiles")]
@@ -84,10 +86,30 @@ public class FileController : ControllerBase
     }
 
     [HttpPost("deletefile")]
-    public IActionResult DeleteFile()
+    public async Task<IActionResult> DeleteFile()
     {
-        // TODO
-        return Ok();
+        HttpRequest request = HttpContext.Request;
+
+        if(!request.Query.TryGetValue("folderid", out StringValues folderIdValue))
+        {
+            return BadRequest("FolderId missing from query params");
+        }
+
+        if(!request.Query.TryGetValue("fileid", out StringValues fileIdValue))
+        {
+            return BadRequest("FileId missing from query params");
+        }
+
+        try {
+            int folderId = int.Parse(folderIdValue.ToString());
+            int fileId = int.Parse(fileIdValue.ToString());
+
+            await _storageManager.DeleteFile(folderId, fileId);
+
+            return Ok();
+        } catch {
+            return BadRequest();
+        }
     }
 
 }

@@ -40,4 +40,16 @@ public class StorageManager
         // Delete folder
         _folderData.DeleteFolder(userId, folderId);
     }
+
+    public async Task DeleteFile(int folderId, int fileId)
+    {
+        FileModel? file = _fileData.GetFile(folderId, fileId);
+        if(file == null) return;
+
+        // Delete file in db
+        _fileData.DeleteFile(folderId, fileId);
+        
+        // Delete file from storage
+        await _blobController.DeleteFile(file);
+    }
 }
