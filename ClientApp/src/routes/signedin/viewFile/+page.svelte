@@ -31,7 +31,7 @@
                 <a
                     href="/signedin"
                     class="bg-red-400 text-white text-l px-5 py-2 rounded-md hover:bg-red-500 inline-block"
-                    >Cancel</a>
+                    >Back</a>
             </div>
         </div>
     </main>
