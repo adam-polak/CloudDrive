@@ -6,6 +6,7 @@ using CloudDrive.Controllers.Lib;
 using CloudDrive.Models;
 using Newtonsoft.Json;
 using CloudDrive.DataAccess.Models;
+using System.Text;
 
 namespace CloudDrive.Controllers;
 
@@ -55,6 +56,13 @@ public class FileController : ControllerBase
             if(uploadFile == null)
             {
                 return BadRequest("Invalid request body format");
+            }
+
+            int fileSize = ASCIIEncoding.ASCII.GetByteCount(uploadFile.Data);
+
+            if(fileSize > 13390000)
+            {
+                return BadRequest("File too large");
             }
 
             if(_fileDataController.ContainsFileName(folderId, uploadFile.Name))
