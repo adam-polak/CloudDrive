@@ -18,14 +18,14 @@
         <div
           class="text-center p-4 mx-auto mt-10 w-[70vw] md:w-[60vw] lg:w-[40vw] h-[75vh] rounded-md shadow bg-white"
         >
-            <h1 class="text-2xl mb-2">View File</h1>
+            <h1 class="text-2xl mb-2">{data.file.Name}</h1>
             {#if message}
                 <h4 class="text-center mt-[-1em] text-md text-red-400">
                     *{message}
                 </h4>
             {/if}
             <div class="shadow h-[80%] mb-4">
-                <p>Content goes here...</p>
+                <p class="h-[100%] w-[100%] overflow-y-auto break-words">{data.file.DataObj}</p>
             </div>
             <div>
                 <a
