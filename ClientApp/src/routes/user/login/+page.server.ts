@@ -45,9 +45,13 @@ export const actions: Actions = {
                 }
             );
 
-            if(result.status != 200) {
+            if(result.status == 401) {
                 return {
                     message: "Invalid username or password"
+                }
+            } else if(result.status != 200) {
+                return {
+                    message: "Try again"
                 }
             }
 
