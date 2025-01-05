@@ -74,33 +74,32 @@
       </form>
     {/if}
     {#if data.contents}
-      <div class="flex flex-col mx-auto">
+      <div class="flex flex-row gap-2 ml-3 flex-wrap mx-auto">
         <form method="POST" action="?/switchfolder">
           <input
             type="hidden"
             name="switchFolderJson"
             value={switchFolderJson}
           />
-          <div class="flex flex-row gap-2 ml-3 flex-wrap w-[100%]">
+          <div class="flex flex-row gap-2 ml-3 flex-wrap">
             {#each folders as folder}
-              <div class="flex-col text-center h-5 w-24">
+              <div class="flex-col text-center">
                 <button
                   type="button"
                   style="position: absolute;"
                   onclick={() => deleteFolder(folder)}
-                  class="bg-red-400 mt-1 ml-2 hover:bg-red-500 text-white w-16 shadow rounded-sm mb-2"
+                  class="bg-red-400 mt-2 ml-4 hover:bg-red-500 text-white w-20 shadow rounded-sm mb-2"
                   >X</button
                 >
                 <button
                   type="submit"
                   style="z-index: -1;"
-                  class="mt-[-.25em]"
                   onclick={() => {
                     switchFolderJson = JSON.stringify(folder);
                   }}
                 >
                   <div
-                    class="bg-white hover:bg-gray-100 shadow pt-10 h-32 w-20 rounded-lg p-4 text-center"
+                    class="bg-white hover:bg-gray-100 shadow pt-10 h-32 w-28 rounded-lg p-4 text-center"
                   >
                     <div class="text-blue-500 mb-2">
                       <svg
@@ -118,7 +117,9 @@
                         />
                       </svg>
                     </div>
-                    <p class="text-sm font-semibold">{folder.Folder_Name}</p>
+                    <div>
+                      <p class="text-sm font-semibold">{folder.Folder_Name}</p>
+                    </div>
                   </div>
                 </button>
               </div>
@@ -127,29 +128,38 @@
         </form>
 
         {#each files as file}
-          <div class="bg-white shadow rounded-lg p-4 text-center">
-            <div class="text-gray-500 mb-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="w-10 h-10 mx-auto"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"
-                />
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M14 2v6h6"
-                />
-              </svg>
-            </div>
-            <p class="text-sm font-semibold">{file.File_Name}</p>
+          <div class="flex flex-col">
+            <button
+              type="button"
+              style="position: absolute;"
+              class="bg-red-400 mt-2 ml-4 hover:bg-red-500 text-white w-20 shadow rounded-sm mb-2"
+              >X</button>
+            <button class="bg-white hover:bg-gray-100 shadow rounded-lg pt-10 px-2 text-center h-32 w-28">
+              <div class="text-gray-500 mb-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  class="w-10 h-10 mx-auto"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M14 2v6h6"
+                  />
+                </svg>
+              </div>
+              <div class="h-9 w-[100%] overflow-auto">
+                <p class="text-sm font-semibold">{file.File_Name}</p>
+              </div>
+            </button>
           </div>
         {/each}
       </div>
