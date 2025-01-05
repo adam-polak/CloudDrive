@@ -1,7 +1,7 @@
 import { json, redirect } from "@sveltejs/kit";
 
-export async function POST({ request, cookies, fetch }) {
 
+export async function POST({ request, cookies, fetch }: { request: any, cookies: any, fetch: any }) {
     const userJson = cookies.get("user");
     if(userJson == null) {
         return redirect(302, "/user/login")
