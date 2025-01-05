@@ -34,7 +34,7 @@
   });
 </script>
 
-<div>
+<div class="bg-gray-100 min-h-screen flex flex-col">
   <header
     class="bg-white shadow-md p-4 flex gap-3 justify-between items-center"
   >
