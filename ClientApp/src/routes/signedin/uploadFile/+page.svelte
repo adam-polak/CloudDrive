@@ -2,6 +2,9 @@
   let { form } = $props();
 
   let files: FileList | undefined = $state();
+  let message = $state(form?.message);
+
+  const maxSize = 10000000;
 
   let data: any = $state();
 
@@ -13,6 +16,12 @@
   $effect(() => {
     if (!(files && files[0])) {
       data = undefined;
+      return;
+    }
+
+    if(files[0].size > maxSize) {
+      message = "File too large (max 10 mb)";
+      files = undefined;
       return;
     }
 
@@ -42,9 +51,9 @@
       class="text-center p-4 mx-auto mt-10 w-[70vw] md:w-[60vw] lg:w-[40vw] h-[32vh] rounded-md shadow bg-white"
     >
       <h1 class="text-2xl mb-8">Upload File</h1>
-      {#if form?.message}
+      {#if message}
         <h4 class="text-center mt-[-1em] mb-2 text-md text-red-400">
-          *{form?.message}
+          *{message}
         </h4>
       {/if}
       <form method="POST" action="">
