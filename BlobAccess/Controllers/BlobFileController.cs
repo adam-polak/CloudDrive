@@ -25,7 +25,7 @@ public class BlobFileController
 
         BlobClient client = _blobClient.GetBlobClient(blobName);
 
-        await client.UploadAsync(json);
+        await client.UploadAsync(BinaryData.FromString(json), overwrite: true);
     }
 
     public async Task UploadFileAsync(FileModel file, Stream stream)
