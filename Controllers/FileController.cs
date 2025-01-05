@@ -48,34 +48,34 @@ public class FileController : ControllerBase
         }
 
         string body = await BodyReader.GetStringFromStream(request.Body);
-        UploadFileModel? file = JsonConvert.DeserializeObject<UploadFileModel>(body);
+        UploadFileModel? uploadFile = JsonConvert.DeserializeObject<UploadFileModel>(body);
 
         try {
 
-            if(file == null)
+            if(uploadFile == null)
             {
                 return BadRequest("Invalid request body format");
             }
 
-            if(_fileDataController.ContainsFileName(folderId, file.Name))
+            if(_fileDataController.ContainsFileName(folderId, uploadFile.Name))
             {
                 return Conflict("File name already exists in folder");
             }
 
-            _fileDataController.CreateFile(folderId, file.Name);
-            FileModel? fileModel = _fileDataController.GetFile(folderId, file.Name);
+            _fileDataController.CreateFile(folderId, uploadFile.Name);
+            FileModel? fileModel = _fileDataController.GetFile(folderId, uploadFile.Name);
 
             if(fileModel != null)
             {
-                await _blobFileController.UploadFileAsync(fileModel, body);
+                await _blobFileController.UploadFileAsync(fileModel, uploadFile.Data);
             }
 
             return Ok();
 
         } catch {
-            if(file != null)
+            if(uploadFile != null)
             {
-                FileModel? fileModel = _fileDataController.GetFile(folderId, file.Name);
+                FileModel? fileModel = _fileDataController.GetFile(folderId, uploadFile.Name);
                 if(fileModel != null)
                 {
                     _fileDataController.DeleteFile(folderId, fileModel.Id);
