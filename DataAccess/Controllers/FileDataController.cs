@@ -14,6 +14,14 @@ public class FileDataController
         _connection = DbConnectionHandler.CreateDbConnection();
     }
 
+    public void CloseConnectionIfOpen()
+    {
+        if(_connection.State == System.Data.ConnectionState.Open)
+        {
+            _connection.Close();
+        }
+    }
+
     private void DoCommand(string sql, object[] parameters)
     {
         _connection.Open();

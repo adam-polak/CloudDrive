@@ -101,6 +101,7 @@ public class FileController : ControllerBase
             return Ok();
 
         } catch {
+            _fileDataController.CloseConnectionIfOpen();
             if(uploadFile != null)
             {
                 FileModel? fileModel = _fileDataController.GetFile(folderId, uploadFile.Name);
