@@ -1,5 +1,6 @@
 using System.Data.Common;
 using System.Security.Cryptography;
+using CloudDrive.Controllers;
 using CloudDrive.DataAccess.Lib;
 using CloudDrive.DataAccess.Models;
 using Dapper;
@@ -30,6 +31,8 @@ public class UserDataController
     {
         string sql = "SELECT * FROM user_table WHERE username = @username AND password = @password;";
 
+        password = UserController.HashString(password);
+
         _connection.Open();
         List<User> users = _connection.Query<User>(sql, new { username = username, password = password }).ToList();
         _connection.Close();
@@ -50,6 +53,7 @@ public class UserDataController
 
     public void CreateUser(string username, string password)
     {
+        // Password is already hashed at this point, no need to again.
         // Setup SQL string
         string sql = "INSERT INTO user_table (username, password, loginkey) VALUES (@username, @password, @loginkey);";
         object[] parameters = { new { username = username, password = password, loginkey = LoginKey.Create() }};
@@ -72,6 +76,7 @@ public class UserDataController
 
     public string? LoginToUser(string username, string password)
     {
+        // I believe the password is hashed at this point? I mean it works.
         if(!CorrectLogin(username, password)) return null;
         
         string loginKey = LoginKey.Create();
@@ -108,6 +113,7 @@ public class UserDataController
 
     public int GetUserId(string username, string password)
     {
+        // Password is already hashed at this point, no need to again.
         string sql = "SELECT * FROM user_table WHERE username = @username AND password = @password;";
         
         _connection.Open();
