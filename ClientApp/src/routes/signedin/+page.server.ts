@@ -1,5 +1,5 @@
 import { addToPath, removeFromPath } from "$lib/folderpath";
-import type { FolderModel, GetContentsResponse, User } from "$lib/types";
+import type { FileModel, FolderModel, GetContentsResponse, User } from "$lib/types";
 import { redirect, type Actions } from "@sveltejs/kit";
 
 async function getFolderPath(fetch: any, loginKey: string, folderId: number) {
@@ -23,6 +23,12 @@ export const load = async ({ cookies, fetch }: { cookies: any, fetch: any }) => 
     }
 
     const user = JSON.parse(userJson);
+
+    if(cookies.get("file") != null) {
+        cookies.delete("file", {
+            path: "/"
+        });
+    }
 
     const folderJson = cookies.get("currentFolder");
 
@@ -85,8 +91,6 @@ export const load = async ({ cookies, fetch }: { cookies: any, fetch: any }) => 
             folderPathsPretty = [ "Root" ];
         else
             folderPathsPretty[0] = "Root";
-        console.log(folderPathsPretty);
-        console.log(folderPathsPretty.length);
 
         return {
             currentFolder: folder,
@@ -181,5 +185,22 @@ export const actions: Actions = {
                 message: "Operation failed try again"
             }
         }
+    },
+    view: async ({ cookies, request }) => {
+        const formData = await request.formData();
+
+        try {
+            const file: FileModel = JSON.parse(formData.get("fileJson")?.toString() ?? "");
+
+            cookies.set("file", JSON.stringify(file), {
+                path: "/"
+            });
+        } catch {
+            return {
+                message: "Couldn't view file"
+            }
+        }
+
+        return redirect(302, "/signedin/viewFile");
     }
 }

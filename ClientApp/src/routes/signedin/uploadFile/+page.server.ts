@@ -22,12 +22,16 @@ export const actions: Actions = {
 
     try {
 
-      const fileName = formData.get("name");
-      const data = formData.get("data");
+      const fileName = formData.get("name")?.toString();
+      const data = formData.get("data")?.toString();
 
       if(fileName == null) {
         return {
           message: "Must choose a file"
+        }
+      } else if(fileName.split('.')[1] == null || fileName.split('.')[1].length == 0) {
+        return {
+          message: "Must not be an executable file"
         }
       }
 

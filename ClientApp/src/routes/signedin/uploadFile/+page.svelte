@@ -34,14 +34,14 @@
   });
 </script>
 
-<div>
+<div class="bg-gray-100 min-h-screen flex flex-col">
   <main>
     <div
-      class="text-center p-4 mx-auto mt-10 w-[70vw] md:w-[60vw] lg:w-[40vw] h-[32vh] rounded-md shadow bg-white"
+      class="text-center p-6 mx-auto mt-10 w-[70vw] md:w-[60vw] lg:w-[40vw] h-[32vh] rounded-md shadow bg-white"
     >
       <h1 class="text-2xl mb-8">Upload File</h1>
       {#if message}
-        <h4 class="text-center mt-[-1em] mb-2 text-md text-red-400">
+        <h4 class="text-center mt-[-2em] mb-2 text-md text-red-400">
           *{message}
         </h4>
       {/if}

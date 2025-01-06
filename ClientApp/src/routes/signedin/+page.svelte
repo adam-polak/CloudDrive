@@ -6,6 +6,7 @@
   let folders = $state(data.contents?.Folders ?? []);
   let files = $state(data.contents?.Files ?? []);
   let switchFolderJson = $state("");
+  let viewFileJson = $state("");
 
   async function deleteFolder(folder: FolderModel) {
     folders = folders.filter((x) => x.Id != folder.Id);
@@ -30,7 +31,7 @@
   <!-- Main Content -->
   <main class="flex-grow p-6">
     <div
-      class="p-4 bg-gray-100 rounded-lg shadow-md mb-6 flex items-center gap-2"
+      class="p-4 bg-white rounded-lg shadow-md mb-6 flex items-center gap-2"
     >
       <h1 class="text-xl">Path:</h1>
       <div class="bg-blue-400 text-white px-2 py-2 rounded-md">
@@ -53,14 +54,14 @@
       </form>
     {/if}
     {#if data.contents}
-      <div class="flex flex-row gap-2 ml-3 flex-wrap mx-auto">
+      <div class="flex flex-row ml-3 flex-wrap mx-auto">
         <form method="POST" action="?/switchfolder">
           <input
             type="hidden"
             name="switchFolderJson"
             value={switchFolderJson}
           />
-          <div class="flex flex-row gap-2 ml-3 flex-wrap">
+          <div class="flex flex-row gap-2 ml-3 flex-wrap mb-2 mr-[-.25em]">
             {#each folders as folder}
               <div class="flex-col text-center">
                 <button
@@ -78,9 +79,9 @@
                   }}
                 >
                   <div
-                    class="bg-white hover:bg-gray-100 shadow pt-10 h-32 w-28 rounded-lg p-4 text-center"
+                    class="bg-white hover:bg-gray-100 shadow pt-10 h-36 w-28 rounded-lg p-4 text-center"
                   >
-                    <div class="text-blue-500 mb-2">
+                    <div class="text-blue-500 mb-2 mt-2">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -105,43 +106,50 @@
             {/each}
           </div>
         </form>
-
-        {#each files as file}
-          <div class="flex flex-col">
-            <button
-              type="button"
-              style="position: absolute;"
-              onclick={() => deleteFile(file)}
-              class="bg-red-400 mt-2 ml-4 hover:bg-red-500 text-white w-20 shadow rounded-sm mb-2"
-              >X</button>
-            <button class="bg-white hover:bg-gray-100 shadow rounded-lg pt-10 px-2 text-center h-32 w-28">
-              <div class="text-gray-500 mb-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="2"
-                  stroke="currentColor"
-                  class="w-10 h-10 mx-auto"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"
-                  />
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M14 2v6h6"
-                  />
-                </svg>
+        <form method="POST" action="?/view">
+          <input type="hidden" name="fileJson" value={viewFileJson} />
+          <div class="flex flex-row gap-2 ml-3 flex-wrap">
+            {#each files as file}
+              <div class="flex flex-col">
+                <button
+                  type="button"
+                  style="position: absolute;"
+                  onclick={() => deleteFile(file)}
+                  class="bg-red-400 mt-2 ml-4 hover:bg-red-500 text-white w-20 shadow rounded-sm mb-2"
+                  >X</button>
+                <button 
+                  class="bg-white hover:bg-gray-100 shadow rounded-lg pt-10 px-2 text-center h-36 w-28"
+                  onclick={() => viewFileJson = JSON.stringify(file)}
+                  >
+                  <div class="text-gray-500 mb-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      class="w-10 h-10 mx-auto"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"
+                      />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M14 2v6h6"
+                      />
+                    </svg>
+                  </div>
+                  <div class="h-9 w-[100%] overflow-auto">
+                    <p class="text-sm font-semibold">{file.File_Name}</p>
+                  </div>
+                </button>
               </div>
-              <div class="h-9 w-[100%] overflow-auto">
-                <p class="text-sm font-semibold">{file.File_Name}</p>
-              </div>
-            </button>
+            {/each}
           </div>
-        {/each}
+        </form>
       </div>
     {/if}
   </main>

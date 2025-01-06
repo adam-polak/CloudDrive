@@ -16,7 +16,12 @@ public class BlobFileController
 
     private string GetBlobName(FileModel file)
     {
-        return $"{file.FolderId}_{file.Id}.json";
+        return GetBlobName(file.FolderId, file.Id);
+    }
+
+    private string GetBlobName(int folderId, int fileId)
+    {
+        return $"{folderId}_{fileId}.txt";
     }
 
     public async Task UploadFileAsync(FileModel file, string json)
@@ -44,14 +49,19 @@ public class BlobFileController
         await _blobClient.DeleteBlobIfExistsAsync(blobName);
     }
 
-    public async Task<string> GetContentsAsString(FileModel file)
+    public async Task<string> GetContentsAsString(int folderId, int fileId)
     {
-        string blobName = GetBlobName(file);
-        
+        string blobName = GetBlobName(folderId, fileId);
+
         BlobClient client = _blobClient.GetBlobClient(blobName);
 
         BlobDownloadResult downloadResult = await client.DownloadContentAsync();
 
-        return downloadResult.ToString() ?? "";
+        return downloadResult.Content.ToString();
+    }
+
+    public async Task<string> GetContentsAsString(FileModel file)
+    {
+       return await GetContentsAsString(file.FolderId, file.Id); 
     }
 }

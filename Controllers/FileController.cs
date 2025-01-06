@@ -25,11 +25,31 @@ public class FileController : ControllerBase
         _storageManager = new StorageManager();
     }
 
-    [HttpGet("getfiles")]
-    public IActionResult GetFiles()
+    [HttpGet("getcontent")]
+    public async Task<IActionResult> GetContent()
     {
-        // TODO
-        return Ok();
+        HttpRequest request = HttpContext.Request;
+
+        if(!request.Query.TryGetValue("fileid", out StringValues fileValue))
+        {
+            return BadRequest();
+        }
+
+        if(!request.Query.TryGetValue("folderid", out StringValues folderValue))
+        {
+            return BadRequest();
+        }
+
+        try {
+            int fileId = int.Parse(fileValue.ToString());
+            int folderId = int.Parse(folderValue.ToString());
+
+            string response = await _blobFileController.GetContentsAsString(folderId, fileId);
+
+            return Ok(response);
+        } catch {
+            return BadRequest();
+        }
     }
 
     [HttpPost("uploadfile")]
@@ -81,6 +101,7 @@ public class FileController : ControllerBase
             return Ok();
 
         } catch {
+            _fileDataController.CloseConnectionIfOpen();
             if(uploadFile != null)
             {
                 FileModel? fileModel = _fileDataController.GetFile(folderId, uploadFile.Name);
