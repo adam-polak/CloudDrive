@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using CloudDrive.DataAccess.Controllers;
 using CloudDrive.DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,13 @@ public class UserController : ControllerBase
     {
         _userDataController = new UserDataController();
         _folderDataController = new FolderDataController();
+    }
+
+    // This could implement salting in the future for better security.
+    public static string HashString(string data) {
+        using SHA256 sha256 = SHA256.Create();
+        byte[] bytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(data));
+        return Convert.ToBase64String(bytes);
     }
 
     [HttpPost("login/{username}/{password}")]
@@ -56,6 +64,8 @@ public class UserController : ControllerBase
             if(_userDataController.ContainsUsername(username)) {
                 return Conflict();
             }
+
+            password = HashString(password);
             _userDataController.CreateUser(username, password);
             int userId = _userDataController.GetUserId(username, password);
             // Create root folder
