@@ -19,7 +19,7 @@
                     *{message}
                 </h4>
             {/if}
-            <div class="shadow h-[75%] overflow-y-auto mb-4">
+            <div class="shadow h-[75%] overflow-y-auto mb-4 bg-gray-50">
                 <DisplayFile name={data.file.Name} fileStr={data.file.DataObj} />
             </div>
             <div>

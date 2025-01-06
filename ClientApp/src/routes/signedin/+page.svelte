@@ -31,7 +31,7 @@
   <!-- Main Content -->
   <main class="flex-grow p-6">
     <div
-      class="p-4 bg-gray-100 rounded-lg shadow-md mb-6 flex items-center gap-2"
+      class="p-4 bg-white rounded-lg shadow-md mb-6 flex items-center gap-2"
     >
       <h1 class="text-xl">Path:</h1>
       <div class="bg-blue-400 text-white px-2 py-2 rounded-md">

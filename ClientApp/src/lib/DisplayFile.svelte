@@ -17,7 +17,7 @@
     }
 </script>
 
-<div>
+<div class="bg-gray-50">
     {#if shouldConvertToPdf(type)}
         <p>Convert to PDF</p>
     {:else if isImage(type)}
