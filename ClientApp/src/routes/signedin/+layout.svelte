@@ -17,12 +17,12 @@
         class="border rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
       <a
-        href="signedin/createFolder"
+        href="/signedin/createFolder"
         class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
         >Create Folder</a
       >
       <a
-        href="signedin/uploadFile"
+        href="/signedin/uploadFile"
         class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
         >Upload File</a
       >

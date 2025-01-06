@@ -79,9 +79,9 @@
                   }}
                 >
                   <div
-                    class="bg-white hover:bg-gray-100 shadow pt-10 h-32 w-28 rounded-lg p-4 text-center"
+                    class="bg-white hover:bg-gray-100 shadow pt-10 h-36 w-28 rounded-lg p-4 text-center"
                   >
-                    <div class="text-blue-500 mb-2">
+                    <div class="text-blue-500 mb-2 mt-2">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -117,7 +117,7 @@
                 class="bg-red-400 mt-2 ml-4 hover:bg-red-500 text-white w-20 shadow rounded-sm mb-2"
                 >X</button>
               <button 
-                class="bg-white hover:bg-gray-100 shadow rounded-lg pt-10 px-2 text-center h-32 w-28"
+                class="bg-white hover:bg-gray-100 shadow rounded-lg pt-10 px-2 text-center h-36 w-28"
                 onclick={() => viewFileJson = JSON.stringify(file)}
                 >
                 <div class="text-gray-500 mb-2">

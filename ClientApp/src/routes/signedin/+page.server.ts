@@ -91,8 +91,6 @@ export const load = async ({ cookies, fetch }: { cookies: any, fetch: any }) => 
             folderPathsPretty = [ "Root" ];
         else
             folderPathsPretty[0] = "Root";
-        console.log(folderPathsPretty);
-        console.log(folderPathsPretty.length);
 
         return {
             currentFolder: folder,
