@@ -8,10 +8,8 @@
 
     const arr = name.split('.');
     const type = arr[arr.length - 1];
-
-    if(shouldConvertToPdf(type)) {
-        // TODO
-    } else if(!isImage(type)) {
+    
+    if(!isImage(type)) {
         const b64 = fileStr.split(',')[1];
         data = atob(b64);
     }
@@ -19,7 +17,7 @@
 
 <div class="bg-gray-50">
     {#if shouldConvertToPdf(type)}
-        <p>Convert to PDF</p>
+        <p class="overflow-y-auto break-words">{data}</p>
     {:else if isImage(type)}
         <img src={fileStr} alt="Display file" />
     {:else}
