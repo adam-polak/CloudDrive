@@ -64,7 +64,7 @@ export const load = async ({ cookies, fetch }: { cookies: any, fetch: any }) => 
 
         const contents: GetContentsResponse = JSON.parse(body);
 
-        let folderPath;
+        let folderPath: string;
         if(folder.Id == user.RootFolderId) {
             folderPath = "/";
             cookies.set("folderPath", folderPath, {
@@ -85,10 +85,19 @@ export const load = async ({ cookies, fetch }: { cookies: any, fetch: any }) => 
             }
         }
 
+        // Break up the folderPath into an array for the client
+        let folderPathsPretty = folderPath.split("/");
+        if (folderPath === "/")
+            folderPathsPretty = [ "Root" ];
+        else
+            folderPathsPretty[0] = "Root";
+        console.log(folderPathsPretty);
+        console.log(folderPathsPretty.length);
+
         return {
             currentFolder: folder,
             contents: contents,
-            folderPath: folderPath
+            folderPathsPretty: folderPathsPretty
         }
     } catch {
         return {
