@@ -1,4 +1,6 @@
 <script lang="ts">
+    import DisplayFile from "$lib/DisplayFile.svelte";
+
     let { data } = $props();
 
     let message = $state();
@@ -24,7 +26,8 @@
                     *{message}
                 </h4>
             {/if}
-            <div class="shadow h-[80%] mb-4">
+            <div class="shadow h-[80%] overflow-y-auto mb-4">
+                <DisplayFile name={data.file.Name} fileStr={data.file.DataObj} />
                 <p class="h-[100%] w-[100%] overflow-y-auto break-words">{data.file.DataObj}</p>
             </div>
             <div>
