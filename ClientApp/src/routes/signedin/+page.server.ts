@@ -1,5 +1,5 @@
 import { addToPath, removeFromPath } from "$lib/folderpath";
-import type { FileModel, FolderModel, GetContentsResponse, User } from "$lib/types";
+import type { ContentModel, FileModel, FolderModel, GetContentsResponse, User } from "$lib/types";
 import { redirect, type Actions } from "@sveltejs/kit";
 
 async function getFolderPath(fetch: any, loginKey: string, folderId: number) {
@@ -62,7 +62,7 @@ export const load = async ({ cookies, fetch }: { cookies: any, fetch: any }) => 
 
         const body = await result.text();
 
-        const contents: GetContentsResponse = JSON.parse(body);
+        const contentsResponse: GetContentsResponse = JSON.parse(body);
 
         let folderPath: string;
         if(folder.Id == user.RootFolderId) {
@@ -91,6 +91,20 @@ export const load = async ({ cookies, fetch }: { cookies: any, fetch: any }) => 
             folderPathsPretty = [ "Root" ];
         else
             folderPathsPretty[0] = "Root";
+
+        let contents: ContentModel[] = [];
+
+        contentsResponse.Files.map(x => contents.push({ File: x, Folder: undefined }));
+        contentsResponse.Folders.map(x => contents.push({ File: undefined, Folder: x }));
+
+        contents = contents.sort((a, b) => {
+            const n1 = (a.File?.File_Name ?? a.Folder?.Folder_Name ?? "").toLowerCase();
+            const n2 = (b.File?.File_Name ?? b.Folder?.Folder_Name ?? "").toLowerCase();
+
+            if(n1 < n2) return 1;
+            else if(n1 > n2) return -1;
+            else return 0;
+        });
 
         return {
             currentFolder: folder,
