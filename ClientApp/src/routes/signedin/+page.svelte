@@ -7,6 +7,22 @@
   let switchFolderJson = $state("");
   let viewFileJson = $state("");
   let contentAction = $state("");
+  let filterWord = $state("");
+
+  function filterContents(word: string) {
+    if(word == "") {
+      contents = data.contents ?? [];
+      return;
+    }
+
+    contents = contents.filter(x => {
+      const n = (x.File?.File_Name ?? x.Folder?.Folder_Name ?? "").toLocaleLowerCase();
+
+      if(n == "") return false;
+      return n.includes(word.toLowerCase());
+    });
+
+  }
 
   async function deleteFolder(folder: FolderModel) {
     contents = contents.filter((x) => x.Folder?.Id != folder.Id);
@@ -31,13 +47,16 @@
   <!-- Main Content -->
   <main class="flex-grow p-6">
     <div
-      class="p-4 bg-white rounded-lg shadow-md mb-6 flex items-center gap-2"
+      class="flex flex-wrap p-4 bg-white rounded-lg shadow-md mb-6 items-center gap-2"
     >
       <h1 class="text-xl">Path:</h1>
-      <div class="bg-blue-400 text-white px-2 py-2 rounded-md">
+      <div class="bg-blue-400 text-white px-2 py-2 rounded-md overflow-x-auto">
         {#each data.folderPathsPretty ?? [] as path}
           <span>{ path } &gt;&nbsp;</span>
         {/each}
+      </div>
+      <div class="mt-4 w-[100%]">
+        <input onkeydown={() => filterContents(filterWord)} type="text" class="border-blue-300 border-2 p-1 rounded-md" placeholder="Search folder..." bind:value={filterWord} />
       </div>
     </div>
     {#if data.currentFolder?.Id != data.RootFolderId}

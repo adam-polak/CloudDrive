@@ -11,6 +11,7 @@ export function isImage(fileSuffix: string) {
         case "pjp":
         case "svg":
         case "webp":
+        case "pdf":
             return true;
         default:
             return false;
