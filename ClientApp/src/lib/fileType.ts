@@ -17,10 +17,11 @@ export function isImage(fileSuffix: string) {
     }
 }
 
-export function shouldConvertToPdf(fileSuffix: string) {
+export function shouldDisplayWithMicrosoft(fileSuffix: string) {
     switch(fileSuffix) {
         case "doc":
         case "docx":
+        case "xlsx":
             return true;
         default:
             return false;
