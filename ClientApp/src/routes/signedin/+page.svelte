@@ -9,7 +9,10 @@
   let contentAction = $state("");
   let filterWord = $state("");
 
-  function filterContents(word: string) {
+  function filterContents(event: any, word: string) {
+    if(event.key === "Backspace") word = word.substring(0, word.length - 1);
+    else word += event.key;
+
     if(word == "") {
       contents = data.contents ?? [];
       return;
@@ -56,7 +59,7 @@
         {/each}
       </div>
       <div class="mt-4 w-[100%]">
-        <input onkeydown={() => filterContents(filterWord)} type="text" class="border-blue-300 border-2 p-1 rounded-md" placeholder="Search folder..." bind:value={filterWord} />
+        <input onkeydown={(e) => filterContents(e, filterWord)} type="text" class="border-blue-300 border-2 p-1 rounded-md" placeholder="Search folder..." bind:value={filterWord} />
       </div>
     </div>
     {#if data.currentFolder?.Id != data.RootFolderId}
