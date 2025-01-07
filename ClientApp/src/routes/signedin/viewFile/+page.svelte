@@ -3,6 +3,10 @@
 
     let { data } = $props();
 
+    const b64 = data.file.Data.split(',')[1];
+    const file = new File([atob(b64)], data.file.Name);
+    const dataUrl = URL.createObjectURL(file);
+
     let message = $state();
 </script>
 
@@ -20,13 +24,18 @@
                 </h4>
             {/if}
             <div class="shadow h-[75%] overflow-y-auto mb-4 bg-gray-50">
-                <DisplayFile name={data.file.Name} fileStr={data.file.DataObj} />
+                <DisplayFile name={data.file.Name} fileStr={data.file.Data} />
             </div>
-            <div>
+            <div class="flex justify-between">
                 <a
                     href="/signedin"
                     class="bg-red-400 text-white text-l px-5 py-2 rounded-md hover:bg-red-500 inline-block"
-                    >Back</a>
+                    >Go Back</a>
+                <a
+                    href={dataUrl}
+                    download={data.file.Name}
+                    class="bg-blue-400 text-white text-l px-5 py-2 rounded-md hover:bg-blue-500 inline-block" 
+                    >Download</a>
             </div>
         </div>
     </main>
