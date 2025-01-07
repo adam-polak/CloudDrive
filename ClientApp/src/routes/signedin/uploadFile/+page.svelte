@@ -34,7 +34,7 @@
   });
 </script>
 
-<div class="bg-gray-100 min-h-screen flex flex-col">
+<div class="bg-gray-100 h-[87.5vh] flex flex-col">
   <main>
     <div
       class="text-center p-6 mx-auto mt-10 w-[70vw] md:w-[60vw] lg:w-[40vw] h-[32vh] rounded-md shadow bg-white"

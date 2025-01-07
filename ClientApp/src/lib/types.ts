@@ -21,3 +21,8 @@ export type GetContentsResponse = {
     Folders: FolderModel[],
     Files: FileModel[]
 }
+
+export type ContentModel = {
+    File: FileModel | undefined,
+    Folder: FolderModel | undefined
+}

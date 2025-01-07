@@ -2,7 +2,7 @@
   let { form } = $props();
 </script>
 
-<div class="bg-gray-100 min-h-screen flex flex-col">
+<div class="bg-gray-100 h-[87.5vh] flex flex-col">
   <main>
     <div
       class="text-center p-4 mx-auto mt-10 w-96 h-[30vh] rounded-md
