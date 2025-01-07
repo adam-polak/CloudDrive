@@ -25,7 +25,7 @@ export const load = async ({ cookies, fetch }: { cookies: any, fetch: any }) => 
 
         const displayFile = {
             Name: file.File_Name,
-            DataObj: body
+            Data: body
         }
 
         return {
