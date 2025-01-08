@@ -11,7 +11,8 @@
 
   function filterContents(event: any, word: string) {
     if(event.key === "Backspace") word = word.substring(0, word.length - 1);
-    else word += event.key;
+    else if(event.key.length == 1) word += event.key;
+    else return;
 
     if(word == "") {
       contents = data.contents ?? [];
