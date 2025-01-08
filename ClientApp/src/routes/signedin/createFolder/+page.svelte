@@ -24,6 +24,7 @@
             type="text"
             id="foldername"
             name="foldername"
+            maxlength="30"
             placeholder="Enter folder name..."
           />
         </div>

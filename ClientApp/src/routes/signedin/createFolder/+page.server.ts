@@ -47,6 +47,10 @@ export const actions: Actions = {
             return {
                 message: "Please enter folder name"
             }
+        } else if(newFolderName.toString().length > 30) {
+            return {
+                message: "Folder name is too long (max 30 characters)"
+            }
         }
 
         try {

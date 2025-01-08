@@ -11,7 +11,8 @@
 
   function filterContents(event: any, word: string) {
     if(event.key === "Backspace") word = word.substring(0, word.length - 1);
-    else word += event.key;
+    else if(event.key.length == 1) word += event.key;
+    else return;
 
     if(word == "") {
       contents = data.contents ?? [];
@@ -122,7 +123,7 @@
                           />
                         </svg>
                       </div>
-                      <div>
+                      <div class="h-9 w-[100%] overflow-auto break-words">
                         <p class="text-sm font-semibold">{content.Folder.Folder_Name}</p>
                       </div>
                     </div>
