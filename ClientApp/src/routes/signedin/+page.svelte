@@ -123,7 +123,7 @@
                           />
                         </svg>
                       </div>
-                      <div>
+                      <div class="h-9 w-[100%] overflow-auto break-words">
                         <p class="text-sm font-semibold">{content.Folder.Folder_Name}</p>
                       </div>
                     </div>
