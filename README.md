@@ -1,6 +1,5 @@
 <a id="readme-top"></a>
 
-<br />
 ## CloudDrive
 <div align="center">
   <p align="center">
