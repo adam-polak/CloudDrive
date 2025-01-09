@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { FileModel, FolderModel } from "$lib/types.js";
+  import type { ContentModel, FileModel, FolderModel } from "$lib/types.js";
 
   let { data } = $props();
 
@@ -8,6 +8,30 @@
   let viewFileJson = $state("");
   let contentAction = $state("");
   let filterWord = $state("");
+  let showDelete = $state(false);
+  let contentToDelete: ContentModel | undefined = $state();
+
+  function setContentToDelete(x: ContentModel) {
+    contentToDelete = x;
+    showDelete = true;
+  }
+
+  async function confirmDeleteContent(x: ContentModel) {
+    if(!showDelete) return;
+
+    if(x.Folder) {
+      deleteFolder(x.Folder);
+    } else if(x.File) {
+      deleteFile(x.File);
+    }
+
+    showDelete = false;
+  }
+
+  function cancelDelete() {
+    contentToDelete = undefined;
+    showDelete = false;
+  }
 
   function filterContents(event: any, word: string) {
     if(event.key === "Backspace") word = word.substring(0, word.length - 1);
@@ -77,7 +101,32 @@
       </form>
     {/if}
     {#if data.contents}
-      <div class="flex flex-row ml-3 flex-wrap mx-auto">
+      {#if showDelete && contentToDelete}
+        <div style="position: absolute; z-index: 1;" class="p-5 justify-between flex flex-col ml-[25vw] lg:ml-[35vw] mb-[-1em] bg-white rounded-md w-[50vw] lg:w-[30vw] h-[30vh] lg:h-[25vh] shadow">
+          <div class="text-lg text-center font-medium overflow-y-auto break-words">
+            {#if contentToDelete.Folder}
+              <p>Are you sure you want to delete folder: "<em>{contentToDelete.Folder.Folder_Name}</em>"?</p>
+            {:else if contentToDelete.File}
+              <p>Are you sure you want to delete file: "<em>{contentToDelete.File.File_Name}</em>"?</p>
+            {/if}
+          </div>
+          <div class="flex flex-row justify-between">
+            <button
+             class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md"
+             onclick={() => { cancelDelete() }}
+             >Cancel</button>
+            <button
+             class="px-4 py-2 bg-red-400 hover:bg-red-500 rounded-md"
+             onclick={() => { 
+                if(contentToDelete) {
+                  confirmDeleteContent(contentToDelete);
+                }
+              }}
+             >Yes, delete it</button>
+          </div>
+        </div>
+      {/if}
+      <div class="flex flex-row ml-3 flex-wrap mx-auto overflow-y-auto h-[55vh]">
         <form method="POST" action={contentAction}>
           <input type="hidden" name="switchFolderJson" value={switchFolderJson} />
           <input type="hidden" name="fileJson" value={viewFileJson} />
@@ -87,13 +136,13 @@
                 {#if content.Folder}
                   <button
                     type="button"
-                    style="position: absolute;"
+                    style="position: relative;"
                     onclick={() => {
                       if(content.Folder){
-                        deleteFolder(content.Folder);
+                        setContentToDelete(content);
                       }
                     }}
-                    class="bg-red-400 mt-2 ml-4 hover:bg-red-500 text-white w-20 shadow rounded-sm mb-2"
+                    class="bg-red-400 mt-2 ml-4 hover:bg-red-500 text-white w-20 shadow rounded-sm mb-[-2em]"
                   >X</button>
                   <button
                     type="submit"
@@ -132,13 +181,13 @@
                   <div class="flex flex-col">
                       <button
                       type="button"
-                      style="position: absolute;"
+                      style="position: relative;"
                       onclick={() => {
                         if(content.File){
-                          deleteFile(content.File);
+                          setContentToDelete(content);
                         }
                       }}
-                      class="bg-red-400 mt-2 ml-4 hover:bg-red-500 text-white w-20 shadow rounded-sm mb-2"
+                      class="bg-red-400 mt-2 ml-4 hover:bg-red-500 text-white w-20 shadow rounded-sm mb-[-2em]"
                     >X</button>
                     <button
                       type="submit"
