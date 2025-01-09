@@ -126,7 +126,7 @@
           </div>
         </div>
       {/if}
-      <div class="flex flex-row ml-3 flex-wrap mx-auto">
+      <div class="flex flex-row ml-3 flex-wrap mx-auto overflow-y-auto h-[55vh]">
         <form method="POST" action={contentAction}>
           <input type="hidden" name="switchFolderJson" value={switchFolderJson} />
           <input type="hidden" name="fileJson" value={viewFileJson} />
@@ -136,13 +136,13 @@
                 {#if content.Folder}
                   <button
                     type="button"
-                    style="position: absolute;"
+                    style="position: relative;"
                     onclick={() => {
                       if(content.Folder){
                         setContentToDelete(content);
                       }
                     }}
-                    class="bg-red-400 mt-2 ml-4 hover:bg-red-500 text-white w-20 shadow rounded-sm mb-2"
+                    class="bg-red-400 mt-2 ml-4 hover:bg-red-500 text-white w-20 shadow rounded-sm mb-[-2em]"
                   >X</button>
                   <button
                     type="submit"
@@ -181,13 +181,13 @@
                   <div class="flex flex-col">
                       <button
                       type="button"
-                      style="position: absolute;"
+                      style="position: relative;"
                       onclick={() => {
                         if(content.File){
                           setContentToDelete(content);
                         }
                       }}
-                      class="bg-red-400 mt-2 ml-4 hover:bg-red-500 text-white w-20 shadow rounded-sm mb-2"
+                      class="bg-red-400 mt-2 ml-4 hover:bg-red-500 text-white w-20 shadow rounded-sm mb-[-2em]"
                     >X</button>
                     <button
                       type="submit"
