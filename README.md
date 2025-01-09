@@ -3,9 +3,6 @@
 ## CloudDrive
 <div align="center">
   <p align="center">
-    A file storage web app that can be hosted locally or on the cloud
-    <br />
-    <br />
     <a href="https://www.youtube.com/watch?v=nGPNc0bkfVc">View Demo</a>
   </p>
 </div>
@@ -39,7 +36,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-A file storage web app that allows users to upload, download, and view files conviently.
+A file storage web app that allows users to upload, download, and view files conveniently. App can be hosted locally or on the cloud.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
