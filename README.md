@@ -2,7 +2,7 @@
 
 ## CloudDrive
 <div align="center">
-  <p align="center">
+  <p align="left">
     <a href="https://www.youtube.com/watch?v=nGPNc0bkfVc">View Demo</a>
   </p>
 </div>
