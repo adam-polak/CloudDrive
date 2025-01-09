@@ -1,9 +1,8 @@
 <a id="readme-top"></a>
 
 <br />
-<div align="center">
 ## CloudDrive
-
+<div align="center">
   <p align="center">
     A file storage web app that can be hosted locally or on the cloud
     <br />
