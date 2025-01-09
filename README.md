@@ -2,7 +2,7 @@
 
 <br />
 <div align="center">
-<h3 align="center">CloudDrive</h3>
+## CloudDrive
 
   <p align="center">
     A file storage web app that can be hosted locally or on the cloud
