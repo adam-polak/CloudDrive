@@ -67,6 +67,48 @@ public class FolderDataController
         _connection.Close();
     }
 
+    public Folder GetFolderByPath(int userId, string folderPath)
+    {
+        _connection.Open();
+
+        var splitting = folderPath.Split("/", StringSplitOptions.RemoveEmptyEntries);
+        string localName = splitting.Last();
+        splitting = splitting.Take(splitting.Length - 1).ToArray(); // Pop last item
+        var foldersMatched = _connection.Query<Folder>("SELECT * FROM folder_table WHERE ownerid = @ownerid AND folder_name = @folder_name", new { ownerid = userId, folder_name = localName });
+
+        Folder? finalFolder = null;
+
+        foreach (var item in foldersMatched)
+        {
+            var parentId = item.ParentId;
+            while (true)
+            {
+                // Ascend upwards per folder found to see if path matches 100%
+                var parentFolder = _connection.Query<Folder>("SELECT * FROM folder_table WHERE ownerid = @ownerid AND id = @id", new { ownerid = userId, id = parentId }).First();
+
+                if (parentFolder.Folder_Name == "root")
+                {
+                    // If we ascended all the way up to the root, this is a match
+                    finalFolder = item;
+                    break;
+                }
+
+                if (parentFolder.Folder_Name != splitting.Last())
+                    break;
+
+                splitting = splitting.Take(splitting.Length - 1).ToArray(); // Pop last item
+
+                parentId = parentFolder.ParentId;
+            }
+        }
+        _connection.Close();
+
+        if (finalFolder == null)
+            throw new Exception("can't find path");
+
+        return finalFolder;
+    }
+
     public Folder GetFolder(int userId, int folderId)
     {
         string sql = "SELECT * FROM folder_table"
