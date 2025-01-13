@@ -86,7 +86,7 @@ public class FolderDataController
                 // Ascend upwards per folder found to see if path matches 100%
                 var parentFolder = _connection.Query<Folder>("SELECT * FROM folder_table WHERE ownerid = @ownerid AND id = @id", new { ownerid = userId, id = parentId }).First();
 
-                if (parentFolder.Folder_Name == "root")
+                if (parentFolder.Folder_Name == "root" && parentFolder.ParentId == 0)
                 {
                     // If we ascended all the way up to the root, this is a match
                     finalFolder = item;
