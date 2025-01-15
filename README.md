@@ -38,8 +38,6 @@
 
 A file storage web app that allows users to upload, download, and view files conveniently. App can be hosted locally or on the cloud.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 ### Built With
