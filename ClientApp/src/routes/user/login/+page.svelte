@@ -8,7 +8,7 @@
     <div class="bg-white shadow-lg rounded-lg p-8 max-w-sm w-full">
         <form method="POST">
             <h2 class="text-2xl font-bold text-gray-800 text-center mb-4">Login</h2>
-            {#if form?.message === "Server error" || form?.message === "Invalid username or password"}
+            {#if form?.message}
                 <h4 class="text-center mb-3 text-md text-red-400">*{form?.message}</h4>
             {/if}
             <div class="mb-4">
